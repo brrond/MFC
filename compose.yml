@@ -1,0 +1,29 @@
+version: '3'
+
+volumes:
+  postgres:
+  pgadmin:
+
+services:
+  mfc-db:
+    image: postgres
+    container_name: mfc-db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=pass
+
+  mfc-admin4:
+    image: dpage/pgadmin4
+    container_name: mfc-admin4
+    ports:
+      - 80:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin4
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=a@a.com
+      - PGADMIN_DEFAULT_PASSWORD=pass
+
