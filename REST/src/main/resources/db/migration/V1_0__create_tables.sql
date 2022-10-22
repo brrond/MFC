@@ -17,7 +17,7 @@ CREATE TABLE "user" (
 
 CREATE TABLE account (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
-    holder uuid REFERENCES "user"(id),
+    holder uuid REFERENCES "user"(id) DEFERRABLE,
     title VARCHAR(255) NOT NULL,
     balance MONEY default 0,
     creation TIMESTAMP
@@ -25,14 +25,14 @@ CREATE TABLE account (
 
 CREATE TABLE operation_type (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
-    creator uuid REFERENCES "user"(id),
+    creator uuid REFERENCES "user"(id) DEFERRABLE,
     title VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE operation (
    id uuid PRIMARY KEY DEFAULT uuid_generate_v4 (),
-   account uuid REFERENCES account (id),
+   account uuid REFERENCES account (id) DEFERRABLE,
    sum MONEY NOT NULL,
-   type uuid REFERENCES operation_type (id),
+   type uuid REFERENCES operation_type (id) DEFERRABLE,
    creation TIMESTAMP
 );
