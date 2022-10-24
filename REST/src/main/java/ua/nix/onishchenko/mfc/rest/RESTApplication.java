@@ -1,4 +1,4 @@
-package ua.nix.onishchenko.mfc;
+package ua.nix.onishchenko.mfc.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

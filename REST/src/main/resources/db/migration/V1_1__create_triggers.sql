@@ -1,7 +1,7 @@
-CREATE FUNCTION delete_operations_from_account() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION delete_operations_from_account() RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM operation WHERE account=OLD.id;
-    RETURN NULL;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -10,10 +10,11 @@ CREATE TRIGGER account_deletion BEFORE DELETE
 FOR EACH ROW EXECUTE FUNCTION delete_operations_from_account();
 
 
-CREATE FUNCTION delete_accounts_from_user() RETURNS TRIGGER AS $$
+CREATE OR REPLACE  FUNCTION delete_accounts_from_user() RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM account WHERE holder=OLD.id;
     DELETE FROM operation_type WHERE creator=OLD.id;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -22,9 +23,10 @@ CREATE TRIGGER user_deletion BEFORE DELETE
 FOR EACH ROW EXECUTE FUNCTION delete_accounts_from_user();
 
 
-CREATE FUNCTION delete_operations_by_operation_type() RETURNS TRIGGER AS $$
+CREATE OR REPLACE  FUNCTION delete_operations_by_operation_type() RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM operation WHERE type=OLD.id;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -33,7 +35,7 @@ CREATE TRIGGER operation_type_deletion BEFORE DELETE
 FOR EACH ROW EXECUTE FUNCTION delete_operations_by_operation_type();
 
 
-CREATE FUNCTION update_balance() RETURNS TRIGGER AS $$
+CREATE OR REPLACE  FUNCTION update_balance() RETURNS TRIGGER AS $$
 BEGIN
     CASE
         WHEN tg_argv[0] = 'delete'
