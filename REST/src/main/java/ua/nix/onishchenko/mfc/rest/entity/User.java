@@ -1,7 +1,6 @@
 package ua.nix.onishchenko.mfc.rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -9,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@ToString
 @Entity
 @Table(name = "\"user\"")
 public class User implements UUIDEntity {
@@ -31,12 +29,10 @@ public class User implements UUIDEntity {
     private Instant creation = Instant.now();
 
     @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "holder")
     private Set<Account> accounts = new LinkedHashSet<>();
 
     @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "creator")
     private Set<OperationType> operationTypes = new LinkedHashSet<>();
 
@@ -96,4 +92,12 @@ public class User implements UUIDEntity {
         this.operationTypes = operationTypes;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "email = " + email + ", " +
+                "creation = " + creation + ")";
+    }
 }

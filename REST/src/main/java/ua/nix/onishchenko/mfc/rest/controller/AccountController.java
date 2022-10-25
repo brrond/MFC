@@ -48,7 +48,7 @@ public class AccountController {
         return Set.of();
     }
 
-    @PostMapping(path="createAccount")
+    @PostMapping(path="s/createAccount")
     public Map<String, Object> createAccount(@RequestParam("userId") UUID id, @RequestParam("title") String title) {
         if (!title.matches("[a-zA-z0-9_. ]+")) {
             return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");

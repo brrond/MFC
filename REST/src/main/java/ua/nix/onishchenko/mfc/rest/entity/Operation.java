@@ -1,13 +1,12 @@
 package ua.nix.onishchenko.mfc.rest.entity;
 
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-@ToString
 @Entity
 @Table(name = "operation")
 public class Operation implements UUIDEntity {
@@ -16,7 +15,7 @@ public class Operation implements UUIDEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account")
     private Account account;
@@ -24,7 +23,7 @@ public class Operation implements UUIDEntity {
     @Column(name = "sum", nullable = false)
     private BigDecimal sum;
 
-    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type")
     private OperationType type;
@@ -72,4 +71,11 @@ public class Operation implements UUIDEntity {
         this.creation = creation;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "sum = " + sum + ", " +
+                "creation = " + creation + ")";
+    }
 }

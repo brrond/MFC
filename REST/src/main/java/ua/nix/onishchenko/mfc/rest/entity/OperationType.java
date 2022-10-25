@@ -1,14 +1,12 @@
 package ua.nix.onishchenko.mfc.rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@ToString
 @Entity
 @Table(name = "operation_type")
 public class OperationType implements UUIDEntity  {
@@ -17,7 +15,7 @@ public class OperationType implements UUIDEntity  {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator")
     private User creator;
@@ -26,7 +24,6 @@ public class OperationType implements UUIDEntity  {
     private String title;
 
     @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "type")
     private Set<Operation> operations = new LinkedHashSet<>();
 
@@ -62,4 +59,10 @@ public class OperationType implements UUIDEntity  {
         this.operations = operations;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "title = " + title + ")";
+    }
 }
