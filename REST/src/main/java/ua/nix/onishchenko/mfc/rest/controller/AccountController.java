@@ -27,14 +27,14 @@ public class AccountController {
     private UserService userService;
 
     @GetMapping(path="s/getGeneralInfo")
-    public Account getGeneralInfo(@RequestParam("accountId") UUID id) {
+    public Map<String, Object> getGeneralInfo(@RequestParam("accountId") UUID id) {
         log.debug("UUID id = " + id);
         Optional<Account> optionalAccount = accountService.findById(id);
         if (optionalAccount.isPresent()) {
             log.debug("UUID id = " + id + " present");
-            return optionalAccount.get();
+            return ControllerUtils.getMap("account", optionalAccount.get());
         }
-        return null;
+        return ControllerUtils.error("account is not presented");
     }
 
     @GetMapping(path="s/getAllOperations")
@@ -51,7 +51,7 @@ public class AccountController {
     @PostMapping(path="createAccount")
     public Map<String, Object> createAccount(@RequestParam("userId") UUID id, @RequestParam("title") String title) {
         if (!title.matches("[a-zA-z0-9_. ]+")) {
-            throw new IllegalArgumentException("Title doesn't match regex [a-zA-z0-9_. ]+");
+            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
         }
 
         log.debug("UUID id = " + id);
@@ -66,7 +66,7 @@ public class AccountController {
             log.debug("UUID id of account is " + account.getId() + " present");
             return ControllerUtils.getMap(account.getId());
         }
-        return Map.of();
+        return ControllerUtils.error("user is not presented");
     }
 
     @PutMapping(path="s/updateAccount")
@@ -74,11 +74,11 @@ public class AccountController {
         log.debug("UUID id = " + id + ", title = " + title);
         Optional<Account> accountOptional = accountService.findById(id);
         if (accountOptional.isEmpty()) {
-            return Map.of();
+            return ControllerUtils.error("account is not presented");
         }
 
         if (!title.matches("[a-zA-z0-9_. ]+")) {
-            throw new IllegalArgumentException("Title doesn't match regex [a-zA-z0-9_. ]+");
+            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
         }
 
         Account account = accountOptional.get();
@@ -93,7 +93,7 @@ public class AccountController {
         log.debug("UUID id = " + id);
         Optional<Account> optionalAccount = accountService.findById(id);
         if (optionalAccount.isEmpty()) {
-            return Map.of();
+            return ControllerUtils.error("account is not presented");
         }
 
         Account account = optionalAccount.get();

@@ -19,29 +19,45 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(path="getUser")
-    public Map<String, Object> getUser(@RequestParam("email") String email) {
-        log.debug("Email = " + email);
-        Optional<User> optionalUser = userService.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            log.debug("UUID id = " + user.getId());
-            return ControllerUtils.getMap(user);
+    @PostMapping("/register")
+    public Map<String, Object> createUser(@RequestBody UserDTO userDTO) {
+        log.debug("User email : " + userDTO.getEmail());
+        if (userDTO.getEmail().isEmpty() || userDTO.getPassword().isEmpty() || userDTO.getName().isEmpty()) {
+            log.debug("One or more fields are empty");
+            return ControllerUtils.error("Email, password and name must be specified");
         }
-        log.debug("User not presented");
-        return Map.of();
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        user.setPassword(userDTO.getPassword());
+
+        try {
+            user = userService.save(user);
+        } catch(Exception e) {
+            user = null;
+            log.error(e.getMessage(), e);
+        }
+
+        if (user == null) {
+            log.debug("Creation unsuccessful");
+            return ControllerUtils.error("Something went wrong");
+        }
+        log.debug("Creation successful. " + user.getId());
+        return ControllerUtils.getMap(user);
     }
 
-    @PutMapping(path="updateUser")
+    @PutMapping(path="s/updateUser")
     public Map<String, Object> updateUser(@RequestBody UserDTO userDTO) {
+        log.debug("userId : " + userDTO.getUserId());
         if (userDTO.getUserId() == null) {
             log.warn("User id is null");
-            return Map.of();
+            return ControllerUtils.error("userId is null");
         }
+
         Optional<User> userOptional = userService.findById(userDTO.getUserId());
         if (userOptional.isEmpty()) {
             log.warn("User id isn't found");
-            return Map.of();
+            return ControllerUtils.error("userId isn't found");
         }
         User user = userOptional.get();
         if (!Objects.equals(userDTO.getEmail(), "")) {
@@ -58,11 +74,16 @@ public class UserController {
             user.setName(userDTO.getName());
         }
 
-        user = userService.save(user, passwordChanged);
+        try {
+            user = userService.save(user, passwordChanged);
+        } catch(Exception e) {
+            log.error(e.getMessage(), e);
+            return ControllerUtils.error("Something went wrong");
+        }
         return ControllerUtils.getMap(user);
     }
 
-    @GetMapping(path="getAllAccounts")
+    @GetMapping(path="s/getAllAccounts")
     public Set<Account> getAllAccounts(@RequestParam("userId")UUID id) {
         log.debug("UUID id = " + id);
         Optional<User> optionalUser = userService.findById(id);
@@ -73,7 +94,7 @@ public class UserController {
         return Set.of();
     }
 
-    @DeleteMapping(path="deleteUser")
+    @DeleteMapping(path="s/deleteUser")
     public Map<String, Object> deleteUser(@RequestParam("userId") UUID id) {
         log.debug("UUID id = " + id);
         Optional<User> optionalUser = userService.findById(id);
@@ -83,7 +104,7 @@ public class UserController {
             userService.delete(user);
             return ControllerUtils.getMap(user);
         }
-        return Map.of();
+        return ControllerUtils.error("User isn't present");
     }
 
 }

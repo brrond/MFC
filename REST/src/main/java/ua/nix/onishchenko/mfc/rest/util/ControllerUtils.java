@@ -24,4 +24,10 @@ public final class ControllerUtils {
         return map;
     }
 
+    public static Map<String, Object> error(String msg) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("error", msg);
+        return map;
+    }
+
 }
