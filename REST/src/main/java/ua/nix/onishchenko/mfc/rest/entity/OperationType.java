@@ -11,7 +11,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "operation_type")
-public class OperationType {
+public class OperationType implements UUIDEntity  {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

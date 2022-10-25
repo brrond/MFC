@@ -14,7 +14,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account implements UUIDEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

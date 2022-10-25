@@ -10,7 +10,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "operation")
-public class Operation {
+public class Operation implements UUIDEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)

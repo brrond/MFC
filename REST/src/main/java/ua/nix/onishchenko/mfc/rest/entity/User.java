@@ -12,7 +12,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "\"user\"")
-public class User {
+public class User implements UUIDEntity {
     @Id
     @GeneratedValue
     @Column(name = "id")

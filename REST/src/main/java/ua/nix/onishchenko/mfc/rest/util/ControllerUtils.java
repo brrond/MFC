@@ -1,6 +1,6 @@
 package ua.nix.onishchenko.mfc.rest.util;
 
-import ua.nix.onishchenko.mfc.rest.entity.User;
+import ua.nix.onishchenko.mfc.rest.entity.UUIDEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,10 +14,8 @@ public final class ControllerUtils {
         return map;
     }
 
-    public static Map<String, Object> getMap(User user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", user.getId());
-        return map;
+    public static Map<String, Object> getMap(UUIDEntity entity) {
+        return getMap(entity.getId());
     }
 
     public static Map<String, Object> getMap(UUID id) {
