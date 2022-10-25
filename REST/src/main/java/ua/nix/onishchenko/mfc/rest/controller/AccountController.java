@@ -3,6 +3,7 @@ package ua.nix.onishchenko.mfc.rest.controller;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ua.nix.onishchenko.mfc.rest.dto.OperationDTO;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
 import ua.nix.onishchenko.mfc.rest.entity.Operation;
 import ua.nix.onishchenko.mfc.rest.entity.User;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CommonsLog
 @RestController
@@ -38,12 +40,12 @@ public class AccountController {
     }
 
     @GetMapping(path="s/getAllOperations")
-    public Set<Operation> getAllOperations(@RequestParam("accountId") UUID id) {
+    public Set<OperationDTO> getAllOperations(@RequestParam("accountId") UUID id) {
         log.debug("UUID id = " + id);
         Optional<Account> optionalAccount = accountService.findById(id);
         if (optionalAccount.isPresent()) {
             log.debug("UUID id = " + id + " present");
-            return optionalAccount.get().getOperations();
+            return optionalAccount.get().getOperations().parallelStream().map(OperationDTO::new).collect(Collectors.toSet());
         }
         return Set.of();
     }
@@ -64,7 +66,7 @@ public class AccountController {
 
             account = accountService.save(account);
             log.debug("UUID id of account is " + account.getId() + " present");
-            return ControllerUtils.getMap(account.getId());
+            return ControllerUtils.getMap(account);
         }
         return ControllerUtils.error("user is not presented");
     }
