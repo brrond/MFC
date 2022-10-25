@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+@org.springframework.stereotype.Service
 public class AccountService implements Service<Account> {
 
     @Autowired
@@ -16,7 +17,7 @@ public class AccountService implements Service<Account> {
 
     @Override
     public Optional<Account> findById(UUID id) {
-        return Optional.empty();
+        return accountRepository.findById(id);
     }
 
     @Override

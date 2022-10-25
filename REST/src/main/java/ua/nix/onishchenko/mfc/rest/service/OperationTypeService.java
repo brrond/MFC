@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+@org.springframework.stereotype.Service
 public class OperationTypeService implements Service<OperationType> {
 
     @Autowired

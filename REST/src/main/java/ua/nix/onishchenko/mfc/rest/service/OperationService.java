@@ -8,6 +8,7 @@ import ua.nix.onishchenko.mfc.rest.repository.OperationRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+@org.springframework.stereotype.Service
 public class OperationService implements Service<Operation> {
 
     @Autowired
