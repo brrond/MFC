@@ -34,9 +34,13 @@ public class UserService implements UserDetailsService,
         return userRepository.findByEmail(email);
     }
 
-    public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User save(User user, boolean encode) {
+        if (encode) user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public User save(User user) {
+        return save(user, true);
     }
 
     @Override
