@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ua.nix.onishchenko.mfc.rest.filter.CustomAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -15,12 +17,18 @@ public class RESTApplicationSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
+        filter.setFilterProcessesUrl("/api/users/login");
         return http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().anyRequest().permitAll()
+                .authorizeRequests().antMatchers("/api/*/s/**").authenticated()
                 .and()
+                .addFilterBefore(
+                        filter,
+                        BasicAuthenticationFilter.class
+                )
                 .build();
     }
 
