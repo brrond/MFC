@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import ua.nix.onishchenko.mfc.rest.filter.CustomAuthenticationFilter;
+import ua.nix.onishchenko.mfc.rest.filter.CustomAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +31,9 @@ public class RESTApplicationSecurityConfig {
                         filter,
                         BasicAuthenticationFilter.class
                 )
+                .addFilterBefore(
+                        new CustomAuthorizationFilter(),
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

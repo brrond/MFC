@@ -4,7 +4,6 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.rest.dto.OperationDTO;
-import ua.nix.onishchenko.mfc.rest.entity.Operation;
 import ua.nix.onishchenko.mfc.rest.entity.OperationType;
 import ua.nix.onishchenko.mfc.rest.entity.User;
 import ua.nix.onishchenko.mfc.rest.service.OperationTypeService;
@@ -16,6 +15,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+// TODO Replace debug to warn for catch causes
+// TODO Improve logging
+// TODO Example in CustomAuthorizationFilter line 56
+
+// TODO: Create new filter that checks if authorized user has such OperationType
 
 @CommonsLog
 @RestController
@@ -51,7 +56,7 @@ public class OperationTypeController {
     }
 
     @PostMapping(path="s/createOperationType")
-    public Map<String, Object> createOperationType(@RequestParam("userId") UUID id,
+    public Map<String, Object> createOperationType(@RequestAttribute("userId") UUID id,
                                              @RequestParam("title") String title) {
         if (!title.matches("[a-zA-z0-9_. ]+")) {
             return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
@@ -111,7 +116,7 @@ public class OperationTypeController {
             log.error(e.getMessage(), e);
             return ControllerUtils.error("Something went wrong");
         }
-        return ControllerUtils.getMap(operationType.getId());
+        return ControllerUtils.getMap(operationType);
     }
 
 }

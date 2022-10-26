@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @GetMapping(path="s/getAllAccounts")
-    public Set<Account> getAllAccounts(@RequestParam("userId")UUID id) {
+    public Set<Account> getAllAccounts(@RequestAttribute("userId") UUID id) {
         log.debug("UUID id = " + id);
         Optional<User> optionalUser = userService.findById(id);
         if (optionalUser.isPresent()) {
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @DeleteMapping(path="s/deleteUser")
-    public Map<String, Object> deleteUser(@RequestParam("userId") UUID id) {
+    public Map<String, Object> deleteUser(@RequestAttribute("userId") UUID id) {
         log.debug("UUID id = " + id);
         Optional<User> optionalUser = userService.findById(id);
         if (optionalUser.isPresent()) {

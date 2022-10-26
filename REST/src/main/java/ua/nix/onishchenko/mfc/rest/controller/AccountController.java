@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.rest.dto.OperationDTO;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
-import ua.nix.onishchenko.mfc.rest.entity.Operation;
 import ua.nix.onishchenko.mfc.rest.entity.User;
 import ua.nix.onishchenko.mfc.rest.service.AccountService;
 import ua.nix.onishchenko.mfc.rest.service.UserService;
@@ -16,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+// TODO: Create new filter that checks if authorized user has such account
 
 @CommonsLog
 @RestController
@@ -51,7 +52,7 @@ public class AccountController {
     }
 
     @PostMapping(path="s/createAccount")
-    public Map<String, Object> createAccount(@RequestParam("userId") UUID id, @RequestParam("title") String title) {
+    public Map<String, Object> createAccount(@RequestAttribute("userId") UUID id, @RequestParam("title") String title) {
         if (!title.matches("[a-zA-z0-9_. ]+")) {
             return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
         }
