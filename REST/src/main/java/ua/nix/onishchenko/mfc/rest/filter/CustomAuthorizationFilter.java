@@ -46,10 +46,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = SecurityUtils.getAlgorithm();
-                    JWTVerifier verifier = JWT.require(algorithm).build();
-                    DecodedJWT decodedJWT = verifier.verify(token);
-                    String email = decodedJWT.getSubject();
+                    String email = SecurityUtils.getEmail(token);
                     Optional<User> optionalUser = userService.findByEmail(email);
                     if (optionalUser.isEmpty()) {
                         log.warn("User isn't found");

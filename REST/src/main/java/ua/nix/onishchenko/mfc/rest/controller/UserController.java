@@ -1,15 +1,27 @@
 package ua.nix.onishchenko.mfc.rest.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.rest.dto.UserDTO;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
 import ua.nix.onishchenko.mfc.rest.entity.User;
 import ua.nix.onishchenko.mfc.rest.service.UserService;
 import ua.nix.onishchenko.mfc.rest.util.ControllerUtils;
+import ua.nix.onishchenko.mfc.rest.util.SecurityUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CommonsLog
 @RestController
@@ -45,6 +57,39 @@ public class UserController {
         }
         log.debug("Creation successful. " + user.getId());
         return ControllerUtils.getMap(user);
+    }
+
+    @GetMapping("/refresh")
+    public Map<String, Object> refresh(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String refreshToken = authorizationHeader.substring("Bearer ".length());
+                String email = SecurityUtils.getEmail(refreshToken);
+                Optional<User> optionalUser = userService.findByEmail(email);
+                if (optionalUser.isEmpty()) {
+                    log.warn("User isn't found");
+                    return ControllerUtils.error("No User present");
+                }
+
+                User user = optionalUser.get();
+                String accessToken = JWT.create()
+                        .withSubject(user.getEmail())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // every 5 minutes
+                        .withIssuer(request.getRequestURI())
+                        .sign(SecurityUtils.getAlgorithm());
+
+                Map<String, Object> tokens = new HashMap<>();
+                tokens.put("access_token", accessToken);
+                tokens.put("refresh_token", refreshToken);
+                return tokens;
+            } catch (Exception e) {
+                log.warn(e.getMessage());
+                log.debug(e);
+                return ControllerUtils.error(e.getMessage());
+            }
+        }
+        return ControllerUtils.error("No refresh token");
     }
 
     @PutMapping(path="s/updateUser")
