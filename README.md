@@ -28,7 +28,7 @@
         <td>Params: String email, String password</td>
         <td>
             Returns JSON Ojbect with two fields: access_token and refresh_token:<br>
-            {"access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCb0JyaWszNUBnbWFpbC5jb20iLCJpc3MiOiIvYXBpL3VzZXJzL2xvZ2luIiwiZXhwIjoxNjY2ODc4ODY5fQ.CCnK2XRMannGGnspXz46MuoXuN06k94hX262FyjfjI4","refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCb0JyaWszNUBnbWFpbC5jb20iLCJpc3MiOiIvYXBpL3VzZXJzL2xvZ2luIiwiZXhwIjoxNjY2ODgwMzY5fQ.VhTml4ItCFZS8aNXJNSGLdshRfHnYqeh9MpcEs39OGg"}
+            {"access_token": "","refresh_token": ""}
         </td>
         <td>Allows User to login in</td>
     </tr>
