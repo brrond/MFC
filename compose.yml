@@ -27,3 +27,9 @@ services:
       - PGADMIN_DEFAULT_EMAIL=a@a.com
       - PGADMIN_DEFAULT_PASSWORD=pass
 
+  mfc-rest:
+    build: REST/
+    container_name: mfc-rest
+    ports:
+      - 8080:8080
+
