@@ -1,14 +1,8 @@
 package ua.nix.onishchenko.mfc.rest.controller;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.rest.dto.UserDTO;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
@@ -21,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CommonsLog
 @RestController

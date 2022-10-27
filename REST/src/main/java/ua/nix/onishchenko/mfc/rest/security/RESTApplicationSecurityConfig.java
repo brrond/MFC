@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ua.nix.onishchenko.mfc.rest.filter.CheckAccessFilter;
 import ua.nix.onishchenko.mfc.rest.filter.CustomAuthenticationFilter;
 import ua.nix.onishchenko.mfc.rest.filter.CustomAuthorizationFilter;
 
@@ -34,6 +35,10 @@ public class RESTApplicationSecurityConfig {
                 .addFilterBefore(
                         new CustomAuthorizationFilter(),
                         UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(
+                        new CheckAccessFilter(),
+                        UsernamePasswordAuthenticationFilter.class
+                )
                 .build();
     }
 

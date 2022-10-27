@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-// TODO: Create new filter that checks if authorized user has such OperationType
-
 @CommonsLog
 @RestController
 @RequestMapping("api/operationtypes")

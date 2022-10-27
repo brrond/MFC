@@ -18,9 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-// TODO: Create new filter that checks if authorized user has such access
-//      and for second method if he has such Operation on one of his accounts
-
 @CommonsLog
 @RestController
 @RequestMapping("api/operations")
