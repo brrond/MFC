@@ -24,14 +24,30 @@
         <td>Register new user in DB</td>
     </tr>
     <tr>
+        <td>login</td>
+        <td>Params: String email, String password</td>
+        <td>
+            Returns JSON Ojbect with two fields: access_token and refresh_token:<br>
+            {"access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCb0JyaWszNUBnbWFpbC5jb20iLCJpc3MiOiIvYXBpL3VzZXJzL2xvZ2luIiwiZXhwIjoxNjY2ODc4ODY5fQ.CCnK2XRMannGGnspXz46MuoXuN06k94hX262FyjfjI4","refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJCb0JyaWszNUBnbWFpbC5jb20iLCJpc3MiOiIvYXBpL3VzZXJzL2xvZ2luIiwiZXhwIjoxNjY2ODgwMzY5fQ.VhTml4ItCFZS8aNXJNSGLdshRfHnYqeh9MpcEs39OGg"}
+        </td>
+        <td>Allows User to login in</td>
+    </tr>
+    <tr>
+        <td>refresh</td>
+        <td>As a Authorization Header must be paced refresh_token in format "Bearer REFRESH_TOKEN"</td>
+        <td>Returns JSON Object with two fields: (see login)
+        </td>
+        <td>Allows User to get new access token by previously generated refresh_token</td>
+    </tr>
+    <tr>
         <td>s/updateUser</td>
-        <td>Params: UUID of User (required, userId) and fields to change data (name/email/password)</td>
+        <td>Params: RequestBody with fields to change data (name/email/password)</td>
         <td>Returns JSON Object with field UUID of updated user</td>   
         <td>Update user. Change password and/or email and/or name</td>
     </tr>
     <tr>
         <td>s/getAllAccounts</td>
-        <td>Params: UUID of User (userId)</td>
+        <td></td>
         <td>
             Returns JSON Array, each element contains JSON Object of Account<br>
             [{"id": "de1007b4-cbac-4252-a161-64534ee66a23","title": "salary","balance": 0.00,"creation": "2022-10-25T10:10:45.923961Z"}]
@@ -40,7 +56,7 @@
     </tr>
     <tr>
         <td>s/deleteUser</td>
-        <td>Params: UUID of User (userId)</td>
+        <td></td>
         <td>Returns JSON Object with field UUID of deleted account</td>
         <td>Delete user from DB</td>
     </tr>
@@ -67,7 +83,7 @@
     </tr>
     <tr>
         <td>s/createAccount</td>
-        <td>Params: UUID of User (userId), title String (title)</td>
+        <td>Params: String title of the account</td>
         <td>
             Returns UUID of new created account<br>
             {"id": "de1007b4-cbac-4252-a161-64534ee66a23"}
@@ -109,7 +125,7 @@
     </tr>
     <tr>
         <td>s/createOperationType</td>
-        <td>Params: UUID of User (userId), title String (title)</td>
+        <td>Params: String title</td>
         <td>Returns UUID id of new created OperationType</td>
         <td>Create OperationType</td>
     </tr>
@@ -126,7 +142,7 @@
         <td>Deletes OperationType from BD</td>
     </tr>
     <tr>
-        <td colspan="4" style="text-align: center">api/operationtypes/</td>
+        <td colspan="4" style="text-align: center">api/operation/</td>
     </tr>
     <tr>
         <td>s/createOperation</td>
@@ -141,3 +157,8 @@
         <td>Delete Operation from DB</td>
     </tr>
 </table>
+
+### Security
+
+All path with ```/s/``` in them are secured path. Only authorized user is allowed to access these methods. They contain and manipulate user data. Moreover, special filter checks if current user has access to specific data.
+As main security method for REST API JSON-Web-Token (JWT) was chosen.
