@@ -52,7 +52,7 @@ public class OperationController {
         if (operationTypeId != null) {
              operationTypeOptional = operationTypeService.findById(operationTypeId);
         } else {
-            log.debug("operationType provided: false");
+            log.debug("OperationType provided: false");
         }
 
         if (accountOptional.isEmpty()) {
@@ -68,8 +68,9 @@ public class OperationController {
         try {
             operation = operationService.save(operation);
         } catch(Exception e) {
-            log.error(e.getMessage(), e);
-            return ControllerUtils.error("Something went wrong");
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
         }
         return ControllerUtils.getMap(operation);
     }
@@ -87,8 +88,9 @@ public class OperationController {
         try {
             operationService.delete(operation);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ControllerUtils.error("Something went wrong");
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
         }
 
         return ControllerUtils.getMap(operation);

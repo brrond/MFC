@@ -16,10 +16,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-// TODO Replace debug to warn for catch causes
-// TODO Improve logging
-// TODO Example in CustomAuthorizationFilter line 56
-
 // TODO: Create new filter that checks if authorized user has such OperationType
 
 @CommonsLog
@@ -41,7 +37,7 @@ public class OperationTypeController {
             log.debug("UUID id = " + id + " present");
             return ControllerUtils.getMap("operationType", optionalOperationType.get());
         }
-        return ControllerUtils.error("account is not presented");
+        return ControllerUtils.error("Account is not presented");
     }
 
     @GetMapping(path="s/getAllOperations")
@@ -57,15 +53,16 @@ public class OperationTypeController {
 
     @PostMapping(path="s/createOperationType")
     public Map<String, Object> createOperationType(@RequestAttribute("userId") UUID id,
-                                             @RequestParam("title") String title) {
-        if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
+                                                   @RequestParam("title") String title) {
+        if (!title.matches(ControllerUtils.getOperationTypeTitleRegex())) {
+            log.debug("Title doesn't match regex");
+            return ControllerUtils.error("Title doesn't match regex " + ControllerUtils.getOperationTypeTitleRegex());
         }
 
-        log.debug("UUID id = " + id);
+        log.debug("User UUID id = " + id);
         Optional<User> optionalUser = userService.findById(id);
         if (optionalUser.isPresent()) {
-            log.debug("UUID id = " + id + " present");
+            log.debug("User UUID id = " + id + " present");
             OperationType operationType = new OperationType();
             operationType.setCreator(optionalUser.get());
             operationType.setTitle(title);
@@ -74,19 +71,20 @@ public class OperationTypeController {
             log.debug("UUID id of account is " + operationType.getId() + " present");
             return ControllerUtils.getMap(operationType.getId());
         }
-        return ControllerUtils.error("user is not presented");
+        return ControllerUtils.error("User is not presented");
     }
 
     @PutMapping(path="s/updateOperationType")
-    public Map<String, Object> updateOperationType(@RequestParam("operationTypeId") UUID id, @RequestParam("title") String title) {
+    public Map<String, Object> updateOperationType(@RequestParam("operationTypeId") UUID id,
+                                                   @RequestParam("title") String title) {
         log.debug("UUID id = " + id + ", title = " + title);
         Optional<OperationType> operationTypeOptional = operationTypeService.findById(id);
         if (operationTypeOptional.isEmpty()) {
-            return ControllerUtils.error("operation type is not presented");
+            return ControllerUtils.error("OperationType is not presented");
         }
 
-        if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
+        if (!title.matches(ControllerUtils.getOperationTypeTitleRegex())) {
+            return ControllerUtils.error("Title doesn't match regex " + ControllerUtils.getOperationTypeTitleRegex());
         }
 
         OperationType operationType = operationTypeOptional.get();
@@ -95,8 +93,9 @@ public class OperationTypeController {
         try {
             operationType = operationTypeService.save(operationType);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ControllerUtils.error("Something went wrong");
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
         }
         return ControllerUtils.getMap(operationType.getId());
     }
@@ -113,8 +112,9 @@ public class OperationTypeController {
         try {
             operationTypeService.delete(operationType);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ControllerUtils.error("Something went wrong");
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
         }
         return ControllerUtils.getMap(operationType);
     }

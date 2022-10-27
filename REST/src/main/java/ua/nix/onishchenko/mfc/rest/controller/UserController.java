@@ -35,7 +35,8 @@ public class UserController {
             user = userService.save(user);
         } catch(Exception e) {
             user = null;
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
+            log.debug(e);
         }
 
         if (user == null) {
@@ -47,18 +48,26 @@ public class UserController {
     }
 
     @PutMapping(path="s/updateUser")
-    public Map<String, Object> updateUser(@RequestBody UserDTO userDTO) {
+    public Map<String, Object> updateUser(@RequestAttribute("userId") UUID userId,
+                                          @RequestBody UserDTO userDTO) {
         log.debug("userId : " + userDTO.getUserId());
+
         if (userDTO.getUserId() == null) {
-            log.warn("User id is null");
+            log.debug("User id is null");
             return ControllerUtils.error("userId is null");
+        }
+
+        if (userId != userDTO.getUserId()) {
+            log.debug("User ids don't match");
+            return ControllerUtils.error("User ids don't match");
         }
 
         Optional<User> userOptional = userService.findById(userDTO.getUserId());
         if (userOptional.isEmpty()) {
-            log.warn("User id isn't found");
-            return ControllerUtils.error("userId isn't found");
+            log.debug("User id isn't found");
+            return ControllerUtils.error("UserId isn't found");
         }
+
         User user = userOptional.get();
         if (!Objects.equals(userDTO.getEmail(), "")) {
             user.setEmail(userDTO.getEmail());
@@ -77,8 +86,9 @@ public class UserController {
         try {
             user = userService.save(user, passwordChanged);
         } catch(Exception e) {
-            log.error(e.getMessage(), e);
-            return ControllerUtils.error("Something went wrong");
+            log.error(e);
+            log.debug(e.getMessage());
+            return ControllerUtils.error(e.getMessage());
         }
         return ControllerUtils.getMap(user);
     }
@@ -101,10 +111,16 @@ public class UserController {
         if (optionalUser.isPresent()) {
             log.debug("UUID id = " + id + " is present");
             User user = optionalUser.get();
-            userService.delete(user);
+            try {
+                userService.delete(user);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                log.debug(e);
+                return ControllerUtils.error(e.getMessage());
+            }
             return ControllerUtils.getMap(user);
         }
-        return ControllerUtils.error("User isn't present");
+        return ControllerUtils.error("User isn't presented");
     }
 
 }

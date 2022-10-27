@@ -30,4 +30,12 @@ public final class ControllerUtils {
         return map;
     }
 
+    public static String getOperationTypeTitleRegex() {
+        return "[a-zA-z0-9_. ]+";
+    }
+
+    public static String getAccountTitleRegex() {
+        return "[a-zA-z0-9_. ]+";
+    }
+
 }

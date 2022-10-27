@@ -53,8 +53,8 @@ public class AccountController {
 
     @PostMapping(path="s/createAccount")
     public Map<String, Object> createAccount(@RequestAttribute("userId") UUID id, @RequestParam("title") String title) {
-        if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
+        if (!title.matches(ControllerUtils.getAccountTitleRegex())) {
+            return ControllerUtils.error("Title doesn't match regex " + ControllerUtils.getAccountTitleRegex());
         }
 
         log.debug("UUID id = " + id);
@@ -65,11 +65,18 @@ public class AccountController {
             account.setHolder(optionalUser.get());
             account.setTitle(title);
 
-            account = accountService.save(account);
+            try {
+                account = accountService.save(account);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                log.debug(e);
+                return ControllerUtils.error(e.getMessage());
+            }
+
             log.debug("UUID id of account is " + account.getId() + " present");
             return ControllerUtils.getMap(account);
         }
-        return ControllerUtils.error("user is not presented");
+        return ControllerUtils.error("User is not presented");
     }
 
     @PutMapping(path="s/updateAccount")
@@ -80,14 +87,20 @@ public class AccountController {
             return ControllerUtils.error("account is not presented");
         }
 
-        if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return ControllerUtils.error("Title doesn't match regex [a-zA-z0-9_. ]+");
+        if (!title.matches(ControllerUtils.getAccountTitleRegex())) {
+            return ControllerUtils.error("Title doesn't match regex " + ControllerUtils.getAccountTitleRegex());
         }
 
         Account account = accountOptional.get();
         account.setTitle(title);
 
-        account = accountService.save(account);
+        try {
+            account = accountService.save(account);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
+        }
         return ControllerUtils.getMap(account.getId());
     }
 
@@ -100,7 +113,13 @@ public class AccountController {
         }
 
         Account account = optionalAccount.get();
-        accountService.delete(account);
+        try {
+            accountService.delete(account);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            log.debug(e);
+            return ControllerUtils.error(e.getMessage());
+        }
         return ControllerUtils.getMap(account.getId());
     }
 
