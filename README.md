@@ -158,7 +158,15 @@
     </tr>
 </table>
 
-### Security
+## Security
 
 All path with ```/s/``` in them are secured path. Only authorized user is allowed to access these methods. They contain and manipulate user data. Moreover, special filter checks if current user has access to specific data.
 As main security method for REST API JSON-Web-Token (JWT) was chosen.
+
+## Tests
+
+As the result of testing 93% of methods and 69% of lines were covered:
+
+<img src='doc/tests.png' alt="list of tests">
+<br>
+<img src='doc/tests_coverage.png' alt="coverage 93% methods 69% lines">

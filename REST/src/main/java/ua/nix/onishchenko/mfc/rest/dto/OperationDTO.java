@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OperationDTO {
+public final class OperationDTO {
     private UUID id;
     private String operationType = "";
     private BigDecimal sum = BigDecimal.ZERO;
