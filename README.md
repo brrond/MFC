@@ -1,8 +1,50 @@
 # Introduction
 
-## REST
+Personal finance is the financial management which an individual or a family unit performs to budget, save, and spend monetary resources over time, taking into account various financial risks and future life events.
 
-### Commands
+Personal finance is a vital part of not only managing your day-to-day financial needs but also planning your financial future. The sooner you get a grip on personal finance, the better your long-term financial prospects will be for things like investing or planning for retirement.
+
+## How it was before
+<img src="doc/process_diagram.png" alt="">
+<br>
+<img src="doc/process_diagram_2.png" alt="">
+<br>
+<img src="doc/process_diagram_3.png" alt="">
+
+## New approach
+
+<img src="doc/process_diagram_4.png" alt="">
+<br>
+<img src="doc/process_diagram_5.png" alt="">
+
+## Architecture
+
+The main idea is to create standalone REST API, which will process user's requests. Requests could be from any other tool. As instance Frontend application will be created.
+
+### Database
+
+<img src="doc/db.png" alt="">
+
+# REST
+
+## List of used technologies
+
+<ul>
+    <li>Java</li>    
+    <li>Spring Boot</li>
+    <li>Spring Security</li>
+    <li>PostgreSQL</li>
+    <li>Flyway</li>
+    <li>Tests (SpringTests + JUnit)</li>
+    <li>Tests (SpringMock)</li>
+    <li>Maven</li>
+</ul>
+
+## Class Diagram
+
+<img src="doc/rest_class_diagram.png" alt="">
+
+## Commands
 <table>
     <tr>
         <td>Link</td>
