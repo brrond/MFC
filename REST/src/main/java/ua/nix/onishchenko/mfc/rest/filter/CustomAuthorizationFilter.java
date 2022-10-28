@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,13 +38,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             assert webApplicationContext != null;
             userService = webApplicationContext.getBean(UserService.class);
         }
-        if (request.getServletPath().contains("/s/")) {
+        if (request.getRequestURI().contains("/s/")) {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
-                    String email = SecurityUtils.getEmail(token);
-                    Optional<User> optionalUser = userService.findByEmail(email);
+                    String id = SecurityUtils.getUserId(token);
+                    Optional<User> optionalUser = userService.findById(UUID.fromString(id));
                     if (optionalUser.isEmpty()) {
                         log.warn("User isn't found");
                         response.setContentType(APPLICATION_JSON_VALUE);
@@ -55,7 +56,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     request.setAttribute("userId", user.getId());
 
                     UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(user.getEmail(), null, new ArrayList<>());
+                            new UsernamePasswordAuthenticationToken(user.getId(), null, new ArrayList<>());
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } catch (Exception e) {
                     log.warn(e.getMessage());

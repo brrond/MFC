@@ -71,9 +71,9 @@ public class UserServiceTest {
 
     @Test
     @Order(5)
-    public void loadUserByUsername_TriesToFindUserByEmail_ReturnsUserDetails() {
-        UserDetails user = userService.loadUserByUsername(userList.get(5).getEmail());
-        assertEquals(userList.get(5).getEmail(), user.getUsername());
+    public void loadUserByUsername_TriesToFindUserById_ReturnsUserDetails() {
+        UserDetails user = userService.loadUserByUsername(userList.get(5).getId().toString());
+        assertEquals(userList.get(5).getId().toString(), user.getUsername());
     }
 
     @Test

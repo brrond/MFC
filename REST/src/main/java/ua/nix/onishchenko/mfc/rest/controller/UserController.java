@@ -39,15 +39,11 @@ public class UserController {
         try {
             user = userService.save(user);
         } catch(Exception e) {
-            user = null;
             log.error(e.getMessage());
             log.debug(e);
+            return ControllerUtils.error(e.getMessage());
         }
 
-        if (user == null) {
-            log.debug("Creation unsuccessful");
-            return ControllerUtils.error("Something went wrong");
-        }
         log.debug("Creation successful. " + user.getId());
         return ControllerUtils.getMap(user);
     }
@@ -58,8 +54,8 @@ public class UserController {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refreshToken = authorizationHeader.substring("Bearer ".length());
-                String email = SecurityUtils.getEmail(refreshToken);
-                Optional<User> optionalUser = userService.findByEmail(email);
+                String id = SecurityUtils.getUserId(refreshToken);
+                Optional<User> optionalUser = userService.findById(UUID.fromString(id));
                 if (optionalUser.isEmpty()) {
                     log.warn("User isn't found");
                     return ControllerUtils.error("No User present");
@@ -67,7 +63,7 @@ public class UserController {
 
                 User user = optionalUser.get();
                 String accessToken = JWT.create()
-                        .withSubject(user.getEmail())
+                        .withSubject(user.getId().toString())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // every 5 minutes
                         .withIssuer(request.getRequestURI())
                         .sign(SecurityUtils.getAlgorithm());
@@ -88,19 +84,9 @@ public class UserController {
     @PutMapping(path="s/updateUser")
     public Map<String, Object> updateUser(@RequestAttribute("userId") UUID userId,
                                           @RequestBody UserDTO userDTO) {
-        log.debug("userId : " + userDTO.getUserId());
+        log.debug("userId : " + userId);
 
-        if (userDTO.getUserId() == null) {
-            log.debug("User id is null");
-            return ControllerUtils.error("userId is null");
-        }
-
-        if (userId != userDTO.getUserId()) {
-            log.debug("User ids don't match");
-            return ControllerUtils.error("User ids don't match");
-        }
-
-        Optional<User> userOptional = userService.findById(userDTO.getUserId());
+        Optional<User> userOptional = userService.findById(userId);
         if (userOptional.isEmpty()) {
             log.debug("User id isn't found");
             return ControllerUtils.error("UserId isn't found");

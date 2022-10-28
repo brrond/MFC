@@ -7,9 +7,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.nix.onishchenko.mfc.rest.entity.User;
-
-import java.util.Date;
 
 @org.springframework.stereotype.Component
 public final class SecurityUtils {
@@ -30,7 +27,7 @@ public final class SecurityUtils {
         return ALGORITHM;
     }
 
-    public static String getEmail(String token) {
+    public static String getUserId(String token) {
         Algorithm algorithm = getAlgorithm();
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decodedJWT = verifier.verify(token);
