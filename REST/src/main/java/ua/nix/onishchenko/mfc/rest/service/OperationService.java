@@ -1,7 +1,6 @@
 package ua.nix.onishchenko.mfc.rest.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.nix.onishchenko.mfc.rest.entity.Account;
 import ua.nix.onishchenko.mfc.rest.entity.Operation;
 import ua.nix.onishchenko.mfc.rest.repository.OperationRepository;
 
@@ -32,14 +31,6 @@ public class OperationService implements Service<Operation> {
     @Override
     public void deleteById(UUID id) {
         operationRepository.deleteById(id);
-    }
-
-    public long countByAccount(Account account) {
-        return operationRepository.countByAccount(account);
-    }
-
-    public long countByAccountId(UUID id) {
-        return operationRepository.countByAccountId(id);
     }
 
 }
