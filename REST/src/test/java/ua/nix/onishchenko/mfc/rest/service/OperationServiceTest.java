@@ -7,12 +7,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
 import ua.nix.onishchenko.mfc.rest.entity.Operation;
 import ua.nix.onishchenko.mfc.rest.entity.User;
-import ua.nix.onishchenko.mfc.rest.service.AccountService;
-import ua.nix.onishchenko.mfc.rest.service.OperationService;
-import ua.nix.onishchenko.mfc.rest.service.UserService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,8 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@ActiveProfiles("dev")
 @SpringBootTest(classes = {ua.nix.onishchenko.mfc.rest.RESTApplication.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class OperationServiceTest {

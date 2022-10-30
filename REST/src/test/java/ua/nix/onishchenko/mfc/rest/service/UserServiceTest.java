@@ -1,17 +1,23 @@
 package ua.nix.onishchenko.mfc.rest.service;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import ua.nix.onishchenko.mfc.rest.entity.User;
-import ua.nix.onishchenko.mfc.rest.service.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("dev")
 @SpringBootTest(classes = {ua.nix.onishchenko.mfc.rest.RESTApplication.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
