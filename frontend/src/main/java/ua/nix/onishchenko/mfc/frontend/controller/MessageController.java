@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MessageController {
 
+    public static String generateMessage(Model model, String msg, String href) {
+        model.addAttribute("msg", msg);
+        model.addAttribute("href", href);
+        return "msg";
+    }
+
     @GetMapping("/login_error")
     public String loginError(Model model) {
         log.warn("Login error");
-        model.addAttribute("msg", "Login error. Check your credentials and try again.");
-        model.addAttribute("href", "/login");
-        return "msg";
+        return generateMessage(model, "Login error. Check your credentials and try again.", "/login");
     }
 
 }
