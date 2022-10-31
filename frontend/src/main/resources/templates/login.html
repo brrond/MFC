@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Financial Control - Login</title>
+
+    <style>
+        form > div {
+            margin: auto;
+            width: 300px;
+        }
+
+        form > div > div {
+            padding: 20px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="content">
+        <h1>Welcome back!</h1>
+        <form action="/authenticate" method="post">
+            <div>
+                <div><label>Email : <input type="email" name="email"></label></div>
+                <div><label>Password : <input type="password" name="password"></label></div>
+                <div><label>Remember me <input type="checkbox" name="remember-me"></label></div>
+                <div><input type="submit" value="Login"></div>
+            </div>
+        </form>
+    </div>
+    <div id="footer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
