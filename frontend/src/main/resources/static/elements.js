@@ -40,7 +40,7 @@ const initMainStyle = () => {
 
     let link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "main.css";
+    link.href = "/main.css";
     document.head.append(link);
 }
 
@@ -50,6 +50,6 @@ const initBackground = () => {
 
     let link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "background.css";
+    link.href = "/background.css";
     document.head.append(link);
 }

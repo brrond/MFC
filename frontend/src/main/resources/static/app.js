@@ -10,7 +10,7 @@ function loadScript(url, callback) {
     head.appendChild(script);
 }
 
-loadScript("elements.js", () => {
+loadScript("/elements.js", () => {
     initHeader();
     initFooter();
     initMainStyle();
