@@ -24,6 +24,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/isActive")
+    public Map<String, Object> isActive(@RequestHeader(AUTHORIZATION) String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            try {
+                String accessToken = token.substring("Bearer ".length());
+                String id = SecurityUtils.getUserId(accessToken);
+                Optional<User> optionalUser = userService.findById(UUID.fromString(id));
+                if (optionalUser.isEmpty()) return ControllerUtils.error("false");
+                return ControllerUtils.error("true");
+            } catch (Exception e) {
+                log.warn(e.getMessage());
+                return ControllerUtils.error(e.getMessage());
+            }
+        }
+        return ControllerUtils.error("false");
+    }
+
     @PostMapping("/register")
     public Map<String, Object> createUser(@RequestBody UserDTO userDTO) {
         log.debug("User email : " + userDTO.getEmail());
