@@ -2,13 +2,13 @@ package ua.nix.onishchenko.mfc.api;
 
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.*;
-import org.springframework.http.converter.ObjectToStringHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @CommonsLog
 public final class AuthorizationRequests extends AbstractAPIRequests{
@@ -65,6 +65,56 @@ public final class AuthorizationRequests extends AbstractAPIRequests{
             log.error(e.getMessage());
             log.debug(e);
             return Util.error(e.getMessage());
+        }
+    }
+
+    public static String refresh(String token) {
+        String url = URL + "refresh";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set(AUTHORIZATION, "Bearer " + token);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<Map> response = getRestTemplate().exchange(url, HttpMethod.GET, entity, Map.class, new Object());
+            if (response.getStatusCode() == HttpStatus.OK &&
+                    response.hasBody() && !response.getBody().containsKey("error")) {
+                return (String) response.getBody().get("access_token");
+            } else {
+                return null;
+            }
+        } catch(Exception e) {
+            log.error(e.getMessage());
+            log.debug(e);
+            return null;
+        }
+    }
+
+    public static boolean isActive(String token) {
+        String url = URL + "isActive";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set(AUTHORIZATION, "Bearer " + token);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<Map> response = getRestTemplate().exchange(url, HttpMethod.GET, entity, Map.class, new Object());
+            if (response.getStatusCode() == HttpStatus.OK &&
+                    response.hasBody() && response.getBody().containsKey("error")) {
+                Map map = response.getBody();
+                if (map.get("error").equals("true")) return true;
+                return false;
+            } else {
+                return false;
+            }
+        } catch(Exception e) {
+            log.error(e.getMessage());
+            log.debug(e);
+            return false;
         }
     }
 
