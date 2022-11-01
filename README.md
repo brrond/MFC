@@ -84,7 +84,7 @@ The main idea is to create standalone REST API, which will process user's reques
         <td>isActive</td>
         <td>As Authorization Header must be placed refresh_token in format "Bearer REFRESH_TOKEN"</td>
         <td>Returns JSON Object with one field: error. If error is "true" then toke is active else the actual error provided</td>
-        <td>Allows User to get new access token by previously generated refresh_token</td>
+        <td>Allows user to make sure that token is active. Works with access tokens</td>
     </tr>
     <tr>
         <td>s/updateUser</td>
