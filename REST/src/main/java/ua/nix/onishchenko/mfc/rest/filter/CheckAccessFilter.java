@@ -52,7 +52,7 @@ public class CheckAccessFilter extends OncePerRequestFilter {
             if (optionalOperationType.isEmpty())
                 throw new RuntimeException("Invalid OperationTypeUUID");
             OperationType type = optionalOperationType.get();
-            if (type.getCreator().getId() != userId) throw new SecurityException("CreatorId and authorized UserId don't match");
+            if (!Objects.equals(type.getCreator().getId(), userId)) throw new SecurityException("CreatorId and authorized UserId don't match");
         }
     }
 
