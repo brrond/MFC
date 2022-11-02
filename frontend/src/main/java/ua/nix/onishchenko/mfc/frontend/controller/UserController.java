@@ -38,14 +38,13 @@ public class UserController {
         Set<Map<String, String>> setOfOperationTypes = UserRequests.getAllOperationTypes(token);
         model.addAttribute("setOfOperationTypes", (setOfOperationTypes == null || setOfOperationTypes.isEmpty()) ? Set.of() : setOfOperationTypes);
 
-        // TODO: Add 'Add Account'*
-        //  'Delete Account'
-        //  'Rename Account'
+        // TODO:    'Delete Account'
+        //          'Rename Account'
         //  'Delete Profile'
         //  'Update Profile'
-        //  'Add OperationType'*
-        //  'Delete OperationType'
-        //  'Rename OperationType'
+        //      'Add OperationType'*
+        //      'Delete OperationType'
+        //      'Rename OperationType'
 
         return "personal_page";
     }

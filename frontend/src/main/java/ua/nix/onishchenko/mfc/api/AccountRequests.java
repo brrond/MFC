@@ -2,6 +2,8 @@ package ua.nix.onishchenko.mfc.api;
 
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
@@ -67,5 +69,18 @@ public class AccountRequests extends AbstractAPIRequests {
             log.debug(e);
             return null;
         }
+    }
+
+    public static String create(String token, String title) {
+        String url = URL + "createAccount";
+
+        HttpHeaders headers = buildHeaders(token);
+
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("title", title);
+
+        HttpEntity<MultiValueMap> entity = new HttpEntity<>(params, headers);
+
+        return (String) exchange(url, entity, HttpMethod.POST, Map.class).get("id");
     }
 }

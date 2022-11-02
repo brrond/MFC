@@ -24,6 +24,8 @@
         <h1 th:text="'Welcome ' + ${name}">Welcome</h1>
         <h3 th:text="'Your email is: ' + ${email}"></h3>
         <h3 th:text="'Registration date: ' + ${creation}">Registration date: </h3>
+        <h3><a href="/s/new_account">Create new account</a></h3>
+
         <h3>List of available accounts: </h3>
         <h3 th:if="${setOfAccounts.isEmpty()}">No accounts found</h3>
         <table border='2' th:if="${!setOfAccounts.isEmpty()}">
