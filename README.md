@@ -93,7 +93,7 @@ The main idea is to create standalone REST API, which will process user's reques
             Returns JSON Object with information about user
             {"name": "Firstname Lastname","email": "BoBrik35@gmail.com","creation": "2022-10-25T04:33:09.759390Z"}
         </td>   
-        <td>Update user. Change password and/or email and/or name</td>
+        <td>Returns general information about user</td>
     </tr>
     <tr>
         <td>s/updateUser</td>
@@ -109,6 +109,15 @@ The main idea is to create standalone REST API, which will process user's reques
             [{"id": "de1007b4-cbac-4252-a161-64534ee66a23","title": "salary","balance": 0.00,"creation": "2022-10-25T10:10:45.923961Z"}]
         </td>       
         <td>Returns all accounts that were created by current user</td>
+    </tr>
+    <tr>
+        <td>s/getAllOperationTypes</td>
+        <td></td>
+        <td>
+            Returns JSON Array, each element contains JSON Object of OperationType<br>
+            [{"id": "de1007b4-cbac-4252-a161-64534ee66a23","title": "some_title"}]
+        </td>       
+        <td>Returns all OperationTypes that were created by current user</td>
     </tr>
     <tr>
         <td>s/deleteUser</td>

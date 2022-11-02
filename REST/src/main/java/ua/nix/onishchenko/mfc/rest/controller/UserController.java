@@ -135,6 +135,17 @@ public class UserController {
         return ControllerUtils.getMap(user);
     }
 
+    @GetMapping(path="s/getAllOperationTypes")
+    public Set<OperationType> getAllOperationTypes(@RequestAttribute("userId") UUID id) {
+        log.debug("UUID id = " + id);
+        Optional<User> optionalUser = userService.findById(id);
+        if (optionalUser.isPresent()) {
+            log.debug("UUID id = " + id + " is present");
+            return optionalUser.get().getOperationTypes();
+        }
+        return Set.of();
+    }
+
     @GetMapping(path="s/getAllAccounts")
     public Set<Account> getAllAccounts(@RequestAttribute("userId") UUID id) {
         log.debug("UUID id = " + id);
