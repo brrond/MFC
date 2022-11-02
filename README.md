@@ -82,9 +82,18 @@ The main idea is to create standalone REST API, which will process user's reques
     </tr>
     <tr>
         <td>isActive</td>
-        <td>As Authorization Header must be placed refresh_token in format "Bearer REFRESH_TOKEN"</td>
+        <td></td>
         <td>Returns JSON Object with one field: error. If error is "true" then toke is active else the actual error provided</td>
         <td>Allows user to make sure that token is active. Works with access tokens</td>
+    </tr>
+    <tr>
+        <td>s/getGeneralInfo</td>
+        <td></td>
+        <td>
+            Returns JSON Object with information about user
+            {"name": "Firstname Lastname","email": "BoBrik35@gmail.com","creation": "2022-10-25T04:33:09.759390Z"}
+        </td>   
+        <td>Update user. Change password and/or email and/or name</td>
     </tr>
     <tr>
         <td>s/updateUser</td>
@@ -207,7 +216,8 @@ The main idea is to create standalone REST API, which will process user's reques
 
 ## Security
 
-All path with ```/s/``` in them are secured path. Only authorized user is allowed to access these methods. They contain and manipulate user data. Moreover, special filter checks if current user has access to specific data.
+All path with ```/s/``` in them are secured path. All queries to ```/s/``` must contain header ```Authorization``` with value ```Bearer {ACCESS_TOKEN}```. 
+Only authorized user is allowed to access these methods. They contain and manipulate user data. Moreover, special filter checks if current user has access to specific data.
 As main security method for REST API JSON-Web-Token (JWT) was chosen.
 
 ## Tests

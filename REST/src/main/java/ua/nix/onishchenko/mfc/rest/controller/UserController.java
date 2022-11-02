@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.rest.dto.UserDTO;
 import ua.nix.onishchenko.mfc.rest.entity.Account;
+import ua.nix.onishchenko.mfc.rest.entity.OperationType;
 import ua.nix.onishchenko.mfc.rest.entity.User;
 import ua.nix.onishchenko.mfc.rest.service.UserService;
 import ua.nix.onishchenko.mfc.rest.util.ControllerUtils;
@@ -143,6 +144,21 @@ public class UserController {
             return optionalUser.get().getAccounts();
         }
         return Set.of();
+    }
+
+    @GetMapping(path="s/getGeneralInfo")
+    public Map<String, Object> getGeneralInfo(@RequestAttribute("userId") UUID id) {
+        log.debug("UUID id = " + id);
+        Optional<User> optionalUser = userService.findById(id);
+        if (optionalUser.isPresent()) {
+            log.debug("UUID id = " + id + " is present");
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", optionalUser.get().getName());
+            map.put("email", optionalUser.get().getEmail());
+            map.put("creation", optionalUser.get().getCreation().toString());
+            return map;
+        }
+        return Map.of();
     }
 
     @DeleteMapping(path="s/deleteUser")
