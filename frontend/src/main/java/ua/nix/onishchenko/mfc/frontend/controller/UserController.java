@@ -42,7 +42,6 @@ public class UserController {
         //          'Rename Account'
         //  'Delete Profile'
         //  'Update Profile'
-        //      'Add OperationType'*
         //      'Delete OperationType'
         //      'Rename OperationType'
 

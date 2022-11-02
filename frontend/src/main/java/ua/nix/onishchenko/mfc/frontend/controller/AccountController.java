@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.api.AccountRequests;
-import ua.nix.onishchenko.mfc.api.Util;
+import ua.nix.onishchenko.mfc.api.OperationTypeRequests;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -62,6 +62,30 @@ public class AccountController {
             return MessageController.generateMessage(model, "Account was registered successfully", "/s/");
         }
         return MessageController.generateMessage(model, "Something went wrong. Try again", "/s/new_account");
+    }
+
+    @GetMapping("/new_operationtype")
+    public String newOperationType() {
+        return "new_operationtype";
+    }
+
+    @PostMapping("/new_operationtype_register")
+    public String newOperationTypeRegistration(Model model,
+                                         HttpSession httpSession,
+                                         @RequestParam("title") String title) {
+
+        String token = httpSession.getAttribute("access_token").toString();
+
+        // TODO: Move regex to some Util class
+        if (!title.matches("[a-zA-z0-9_. ]+")) {
+            return MessageController.generateMessage(model, "Title doesn't match regex [a-zA-z0-9_. ]+", "/s/new_operationtype");
+        }
+
+        String uuid = OperationTypeRequests.create(token, title);
+        if (uuid != null) {
+            return MessageController.generateMessage(model, "OperationType was registered successfully", "/s/");
+        }
+        return MessageController.generateMessage(model, "Something went wrong. Try again", "/s/new_operationtype");
     }
 
 }
