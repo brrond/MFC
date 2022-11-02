@@ -16,7 +16,7 @@ public class OperationType implements UUIDEntity  {
     private UUID id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator")
     private User creator;
 
