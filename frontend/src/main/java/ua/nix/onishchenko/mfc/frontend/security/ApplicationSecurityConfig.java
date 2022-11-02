@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ua.nix.onishchenko.mfc.frontend.filter.CustomAuthenticationFilter;
 import ua.nix.onishchenko.mfc.frontend.filter.CustomAuthorizationFilter;
@@ -33,6 +32,12 @@ public class ApplicationSecurityConfig {
                     .loginProcessingUrl("/authenticate")
                     .defaultSuccessUrl("/s/")
                     .failureUrl("/login_error")
+                .and()
+                    .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutSuccessUrl("/login")
+                    .deleteCookies("JSESSIONID")
                 .and()
                 .addFilterBefore(
                         customAuthenticationFilter,
