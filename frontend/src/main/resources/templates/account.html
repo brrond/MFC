@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Financial Control - Personal page</title>
+    <style>
+        table {
+            width: 50%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="content">
+        <h3 th:text="'Account: ' + ${title}"></h3>
+        <h3 th:text="'Balance: ' + ${balance}"></h3>
+        <h3 th:text="'Creation date: ' + ${creation}">Registration date: </h3>
+        <h3>List of operations on current account: </h3>
+        <h3 th:if="${setOfOperations.isEmpty()}">No operations found</h3>
+        <table border='2' th:if="${!setOfOperations.isEmpty()}">
+            <tr>
+                <td>Sum</td>
+                <td>Type</td>
+                <td>Date</td>
+            </tr>
+            <tr th:each="operation : ${setOfOperations}">
+                <td th:text="${operation.get('sum')}"></td>
+                <td th:text="${operation.get('operationType')}"></td>
+                <td th:text="${operation.get('creation')}"></td>
+            </tr>
+        </table>
+        <hr>
+
+        <h3><a href="/s/">Personal page</a></h3>
+
+    </div>
+    <div id="footer"></div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

@@ -6,12 +6,53 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>My Financial Control - Personal page</title>
+    <style>
+        table {
+            width: 50%;
+            margin: auto;
+        }
 
+        #listDiv {
+            margin: auto;
+            width: 30%;
+        }
+    </style>
 </head>
 <body>
     <div id="header"></div>
     <div id="content">
-        <h1>You're somehow authorized!</h1>
+        <h1 th:text="'Welcome ' + ${name}">Welcome</h1>
+        <h3 th:text="'Your email is: ' + ${email}"></h3>
+        <h3 th:text="'Registration date: ' + ${creation}">Registration date: </h3>
+        <h3>List of available accounts: </h3>
+        <h3 th:if="${setOfAccounts.isEmpty()}">No accounts found</h3>
+        <table border='2' th:if="${!setOfAccounts.isEmpty()}">
+            <tr>
+                <td>Account name</td>
+                <td>Balance</td>
+                <td>Date of creation</td>
+            </tr>
+            <tr th:each="account : ${setOfAccounts}">
+                <td><a th:text="${account.get('title')}" th:href="'/s/account/' + ${account.get('id')}"></a></td>
+                <td th:text="${account.get('balance')}"></td>
+                <td th:text="${account.get('creation')}"></td>
+            </tr>
+        </table>
+        <hr>
+
+        <h3>List of available operation types: </h3>
+        <h3 th:if="${setOfOperationTypes.isEmpty()}">No operation types found</h3>
+        <div id="listDiv">
+            <ul  th:if="${!setOfOperationTypes.isEmpty()}">
+                <li th:each="operationType : ${setOfOperationTypes}">
+                    <p th:text="${operationType.get('title')}"></p>
+                </li>
+            </ul>
+        </div>
+        <hr>
+
+        <h3><a href="/logout">Logout</a></h3>
+
     </div>
     <div id="footer"></div>
 
