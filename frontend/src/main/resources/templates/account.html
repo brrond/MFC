@@ -19,6 +19,8 @@
         <h3 th:text="'Account: ' + ${title}"></h3>
         <h3 th:text="'Balance: ' + ${balance}"></h3>
         <h3 th:text="'Creation date: ' + ${creation}">Registration date: </h3>
+        <h3><a th:href="'/s/new_operation?accountId=' + ${accountId}">Create new operation</a></h3>
+
         <h3>List of operations on current account: </h3>
         <h3 th:if="${setOfOperations.isEmpty()}">No operations found</h3>
         <table border='2' th:if="${!setOfOperations.isEmpty()}">

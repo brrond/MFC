@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @CommonsLog
-public class OperationTypeRequests extends AbstractAPIRequests {
+public final class OperationTypeRequests extends AbstractAPIRequests {
 
     private static final String URL = getBaseUrl() + "operationtypes/s/";
 

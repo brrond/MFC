@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Financial Control - New operation page</title>
+    <style>
+        form {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<div id="content">
+    <h1>New Operation page</h1>
+
+    <form action="/s/new_operation_register" method="post">
+        <label><input type="text" name="accountId" hidden th:value="${accountId}"></label>
+        <label>Sum: <input type="number" name="sum" step="0.01" id="inpSum"></label><br><br>
+        <label>
+            Operation type :
+            <select name="operationtpye">
+                <option th:each="operationtype : ${operationtypes}" th:value="${operationtype.get('id')}" th:text="${operationtype.get('title')}"></option>
+            </select>
+        </label><br><br>
+        <label>
+            <input type="datetime-local" name="datetime" id="datetime">
+        </label><br><br>
+        <input id="btnSubmit" type="submit" value="Create new operation">
+    </form>
+
+</div>
+<div id="footer"></div>
+
+<script src="/app.js"></script>
+<script>
+    var d = new Date();
+    var datetime = document.getElementById("datetime");
+    datetime.setAttribute("value", d.toISOString().slice(0, 16))
+    d.setDate(d.getDate() + 1);
+    datetime.setAttribute("max", d.toISOString().slice(0, 16));
+
+    var select = document.getElementsByTagName("select")[0];
+    var options = select.getElementsByTagName("option");
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].value === "null") {
+            options[i].setAttribute("selected", "");
+            break;
+        }
+    }
+
+    var submit = document.getElementById("btnSubmit");
+    submit.setAttribute("disabled", "");
+
+    var inpSum = document.getElementById("inpSum");
+    inpSum.addEventListener("change", (e) => {
+        submit.setAttribute("disabled", "");
+        if (inpSum.value === undefined || isNaN(inpSum.value)) return;
+        inpSum.value = Math.round(parseFloat(inpSum.value) * 100) / 100;
+        if (inpSum.value !== '0') submit.removeAttribute("disabled");
+    });
+</script>
+</body>
+</html>

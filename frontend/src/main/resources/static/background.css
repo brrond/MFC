@@ -24,6 +24,8 @@
     animation-duration: 10;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+
+    opacity: 50%;
 }
 
 

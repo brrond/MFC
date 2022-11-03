@@ -26,12 +26,12 @@ public class AccountController {
         model.addAttribute("title", accountInfo.get("title"));
         model.addAttribute("balance", accountInfo.get("balance"));
         model.addAttribute("creation", accountInfo.get("creation"));
+        model.addAttribute("accountId", accountId);
 
         Set<Map<String, String>> setOfOperations = AccountRequests.getAllOperations(token, accountId);
         model.addAttribute("setOfOperations", (setOfOperations == null || setOfOperations.isEmpty()) ? Set.of() : setOfOperations);
 
-        // TODO: Add    'Add Operation'*
-        //              'Delete Operation'
+        // TODO: Add 'Delete Operation'
 
         // TODO: Add filters
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 @CommonsLog
-public class AccountRequests extends AbstractAPIRequests {
+public final class AccountRequests extends AbstractAPIRequests {
 
     private static final String URL = getBaseUrl() + "accounts/s/";
 
