@@ -21,7 +21,7 @@ public final class OperationDTO {
 
     public OperationDTO(Operation operation) {
         id = operation.getId();
-        operationType = operation.getType().getTitle();
+        if (operation.getType() != null) operationType = operation.getType().getTitle();
         sum = operation.getSum();
         creation = operation.getCreation();
     }
