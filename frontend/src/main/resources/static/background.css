@@ -15,7 +15,7 @@
 }
 
 .background span {
-    width: 2vmin;
+    width: 3vmin;
     height: 2vmin;
     border-radius: 2vmin;
     backface-visibility: hidden;
@@ -25,7 +25,7 @@
     animation-timing-function: linear;
     animation-iteration-count: infinite;
 
-    opacity: 50%;
+    opacity: 40%;
 }
 
 

@@ -27,21 +27,22 @@ body a:visited {
 }
 
 #header {
-    background-color: rgba(0, 0, 255, 90%);
+    background-color: rgba(0, 0, 255, 95%);
 
     text-align: center;
 }
 
 #content {
-    background-color: rgb(128, 128, 255, 90%);
+    background-color: rgb(128, 128, 255, 95%);
 
     text-align: center;
 
-    min-height: 500px;
+    height: 80%;
+    overflow: auto;
 }
 
 #footer {
-    background-color: rgb(128, 128, 255, 90%);
+    background-color: rgb(128, 128, 255, 95%);
 
     text-align: center;
 }

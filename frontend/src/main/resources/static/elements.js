@@ -36,8 +36,6 @@ const initFooter = () => {
 }
 
 const initMainStyle = () => {
-    document.body.classList.add("background");
-
     let link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "/main.css";

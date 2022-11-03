@@ -8,8 +8,10 @@ import ua.nix.onishchenko.mfc.api.AccountRequests;
 import ua.nix.onishchenko.mfc.api.OperationTypeRequests;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @CommonsLog
@@ -29,13 +31,15 @@ public class AccountController {
         model.addAttribute("accountId", accountId);
 
         Set<Map<String, String>> setOfOperations = AccountRequests.getAllOperations(token, accountId);
-        model.addAttribute("setOfOperations", (setOfOperations == null || setOfOperations.isEmpty()) ? Set.of() : setOfOperations);
+        model.addAttribute("setOfOperations", (setOfOperations == null || setOfOperations.isEmpty()) ? Set.of() :
+                setOfOperations.stream().sorted((o1, o2) -> {
+                    LocalDateTime ldt1 = LocalDateTime.parse(o1.get("creation"), DateTimeFormatter.ISO_DATE_TIME);
+                    LocalDateTime ldt2 = LocalDateTime.parse(o2.get("creation"), DateTimeFormatter.ISO_DATE_TIME);
+                    return ldt1.compareTo(ldt2);
+                }).collect(Collectors.toList()));
 
         // TODO: Add 'Delete Operation'
-
         // TODO: Add filters
-
-        // TODO: Add simple visualization on page*
 
         return "account";
     }
