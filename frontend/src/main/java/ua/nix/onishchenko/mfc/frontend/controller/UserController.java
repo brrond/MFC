@@ -25,7 +25,7 @@ public class UserController {
         Map<String, String> map = UserRequests.getGeneralInfo(token);
         if (map == null || map.isEmpty()) {
             // TODO: Almost impossible but still implement error case
-            return generateMessage(model, "TODO: Later", "/");
+            return generateMessage(model, "Error", "You should see it. TODO: Later", "/", "Go to Home");
         }
 
         model.addAttribute("name", map.get("name"));

@@ -44,7 +44,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         HttpSession session = request.getSession();
         session.setAttribute("access_token", map.get("access_token"));
-        if (Objects.equals(rememberMe, "on")) {
+        if (Objects.equals(rememberMe, "true")) {
             session.setAttribute("refresh_token", map.get("refresh_token"));
         }
         UsernamePasswordAuthenticationToken authenticationToken =

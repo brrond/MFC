@@ -21,7 +21,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if (request.getRequestURI().contains("/s/")) {
             HttpSession session = request.getSession(false);
             if (session == null) {
-                log.warn("No session found");
                 response.sendRedirect("/login");
                 return;
             }

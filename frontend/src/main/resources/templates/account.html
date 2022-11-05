@@ -10,18 +10,18 @@
 <body>
   <header></header>
 
-    <!-- ======= Sidebar ======= -->
+  <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="/">
           <i class="bi bi-grid"></i>
           <span>Home</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="personal_page.html">
+        <a class="nav-link collapsed" href="/s/">
           <i class="bi bi-person-fill"></i>
           <span>Personal Page</span>
         </a>
@@ -32,21 +32,24 @@
           <i class="bi bi-menu-button-wide"></i><span>Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="account.html">
-              <i class="bi bi-circle"></i><span>Some account</span>
+          <li th:each="account : ${setOfAccounts}">
+            <a th:href="'/s/account/' + ${account.get('id')}">
+              <i class="bi bi-circle"></i>
+              <span th:text="${account.get('title')}"></span>
             </a>
           </li>
         </ul>
       </li><!-- End Accounts Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="personal_page.html">
+        <a class="nav-link collapsed" href="/logout">
           <i class="bi bi-box-arrow-left"></i>
           <span>Logout</span>
         </a>
       </li>
-  </aside><!-- End Sidebar-->
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -72,7 +75,7 @@
                       <i class="bi bi-credit-card"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>Title here</h6>
+                      <h6 th:text="${title}"></h6>
                     </div>
                   </div>
                 </div>
@@ -92,7 +95,7 @@
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>$3,264</h6>
+                      <h6 th:text="${balance}"></h6>
                     </div>
                   </div>
                 </div>
@@ -112,9 +115,8 @@
                       <i class="bi bi-cash"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>20.52</h6>
-                      <span class="small pt-1 fw-bold">Date here</span> <span class="text-muted small pt-2 ps-1"></span>
-
+                      <h6 th:if="${!setOfOperations.isEmpty()}" th:text="${setOfOperations.get(setOfOperations.size() - 1).get('sum')}"></h6>
+                      <span th:if="${!setOfOperations.isEmpty()}" th:text="${setOfOperations.get(setOfOperations.size() - 1).get('creation')}" class="small pt-1 fw-bold">Date here</span> <span class="text-muted small pt-2 ps-1"></span>
                     </div>
                   </div>
 
@@ -131,32 +133,15 @@
                   <h5 class="card-title">Statistics</h5>
 
                   <!-- Line Chart -->
-                  <canvas id="lineChart" style="max-height: 400px;"></canvas>
-                  <script>
-                    var loadData = () => {
-                      document.addEventListener("DOMContentLoaded", () => {
-                        new Chart(document.querySelector('#lineChart'), {
-                          type: 'line',
-                          data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                            datasets: [{
-                              label: 'Line Chart',
-                              data: [65, 59, 80, 81, 56, 55, 40],
-                              fill: false,
-                              borderColor: 'rgb(75, 192, 192)',
-                              tension: 0.1
-                            }]
-                          },
-                          options: {
-                            scales: {
-                              y: {
-                                beginAtZero: true
-                              }
-                            }
-                          }
-                        });
-                      });
-                    };
+                  <canvas id="chart" style="max-height: 400px;"></canvas>
+                  <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    var creation = /*[[${creation}]]*/'';
+                    var labels = [creation];
+                    var data = [0];
+                    let sum = 0.0;
+                    let date = '';
+                    /*]]>*/
                   </script>
                   <!-- End Line CHart -->
                 </div>
@@ -171,7 +156,8 @@
                 <div class="card-body">
                   <h5 class="card-title">Operations</h5>
 
-                  <table class="table table-borderless">
+                  <h6 th:if="${setOfOperations.isEmpty()}">No operations found</h6>
+                  <table  class="table table-borderless" th:if="${!setOfOperations.isEmpty()}">
                     <thead>
                       <tr>
                         <th scope="col">Sum</th>
@@ -180,25 +166,19 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>$64</td>
-                        <td>Brandon Jacob</td>
-                        <td>At praesentium minu</td>
-                      </tr>
-                      <tr>
-                        <td>$64</td>
-                        <td>Brandon Jacob</td>
-                        <td>At praesentium minu</td>
-                      </tr>
-                      <tr>
-                        <td>$64</td>
-                        <td>Brandon Jacob</td>
-                        <td>At praesentium minu</td>
-                      </tr>
-                      <tr>
-                        <td>$64</td>
-                        <td>Brandon Jacob</td>
-                        <td>At praesentium minu</td>
+                      <tr th:each="operation : ${setOfOperations}">
+                        <td th:text="${operation.get('sum')}"></td>
+                        <td th:text="${operation.get('operationType')}"></td>
+                        <td th:text="${operation.get('creation')}"></td>
+                        <script th:inline="javascript">
+                          /*<![CDATA[*/
+                          sum = /*[[${operation.get('sum')}]]*/ 0.0;
+                          sum = parseFloat(data[data.length - 1]) + parseFloat(sum);
+                          date = /*[[${operation.get('creation')}]]*/ '';
+                          labels.push(date);
+                          data.push(sum);
+                          /*]]>*/
+                        </script>
                       </tr>
                     </tbody>
                   </table>
@@ -218,28 +198,30 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">New Operation</h5>
-              <form action="/new-opeartion-register" class="needs-validation" method="POST" novalidate>
-                <label for="inpTitle" class="col-4 col-form-label">Title</label>
-                <div class="col-md-8 col-lg-12">
-                  <input name="title" type="text" class="form-control" id="inpTitle" required>
-                  <div class="invalid-feedback">Please provide a title</div>
-                </div>
+              <form action="/s/new_operation_register" class="needs-validation" method="POST" novalidate>
+                <label><input type="text" name="accountId" hidden th:value="${accountId}"></label>
 
                 <label for="inpSum" class="col-4 col-form-label">Sum</label>
-                <div class="col-md-8 col-lg-12">
-                  <input name="sum" type="number" class="form-control" id="inpSum" required>
+                <div class="col-8 col-12">
+                  <input name="sum" type="number" step="0.01" class="form-control" id="inpSum" required>
                   <div class="invalid-feedback">Please provide sum</div>
                 </div>
 
-                <label for="inpSum" class="col-4 col-form-label">Sum</label>
-                <div class="col-md-8 col-lg-12">
-                  <input name="sum" type="datetime-local" class="form-control" id="inpSum" required>
-                  <div class="invalid-feedback">Please provide sum</div>
+                <label for="select" class="col-sm-2 col-form-label">Select</label>
+                <div class="col-10">
+                  <select name="operationtpye" class="form-select" id="select">
+                    <option th:each="operationtype : ${operationtypes}" th:value="${operationtype.get('id')}" th:text="${operationtype.get('title')}"></option>
+                  </select>
+                </div>
+
+                <label for="datetime">Date and time of operation</label>
+                <div class="col-10">
+                  <input type="datetime-local" name="datetime" id="datetime">
                 </div>
 
                 <div class="text-center">
                   <br>
-                  <button type="submit" class="btn btn-success">Create new operation</button>
+                  <button type="submit" class="btn btn-success" id="btnSubmit">Create new operation</button>
                 </div>
               </form>
             </div>
@@ -327,6 +309,35 @@
 
   <footer></footer>
 
-  <script src="assets/js/app.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/chart.js"></script>
+  <script>
+    var d = new Date();
+    var datetime = document.getElementById("datetime");
+    datetime.setAttribute("value", d.toISOString().slice(0, 16))
+    d.setDate(d.getDate() + 1);
+    datetime.setAttribute("max", d.toISOString().slice(0, 16));
+
+    var select = document.getElementsByTagName("select")[0];
+    var options = select.getElementsByTagName("option");
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].value === "null") {
+        options[i].setAttribute("selected", "");
+        break;
+      }
+    }
+
+    var submit = document.getElementById("btnSubmit");
+    submit.setAttribute("disabled", "");
+
+    var inpSum = document.getElementById("inpSum");
+    inpSum.addEventListener("change", (e) => {
+      submit.setAttribute("disabled", "");
+      if (inpSum.value === undefined || isNaN(inpSum.value)) return;
+      inpSum.value = Math.round(parseFloat(inpSum.value) * 100) / 100;
+      if (inpSum.value !== '0') submit.removeAttribute("disabled");
+    });
+  </script>
+
 </body>
 </html>

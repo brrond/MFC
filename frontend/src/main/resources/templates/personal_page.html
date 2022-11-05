@@ -14,14 +14,14 @@
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
       <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
+        <a class="nav-link collapsed" href="/">
           <i class="bi bi-grid"></i>
           <span>Home</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="personal_page.html">
+        <a class="nav-link collapsed" href="/s/">
           <i class="bi bi-person-fill"></i>
           <span>Personal Page</span>
         </a>
@@ -32,20 +32,22 @@
           <i class="bi bi-menu-button-wide"></i><span>Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="account.html">
-              <i class="bi bi-circle"></i><span>Some account</span>
+          <li th:each="account : ${setOfAccounts}">
+            <a th:href="'/s/account/' + ${account.get('id')}">
+              <i class="bi bi-circle"></i>
+              <span th:text="${account.get('title')}"></span>
             </a>
           </li>
         </ul>
       </li><!-- End Accounts Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="personal_page.html">
+        <a class="nav-link collapsed" href="/logout">
           <i class="bi bi-box-arrow-left"></i>
           <span>Logout</span>
         </a>
       </li>
+    </ul>
   </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
@@ -58,16 +60,16 @@
       <!-- Overview -->
       <div class="row">
 
-        <div class="col-xl-12">
+        <div class="col-12">
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-              <h2>Name</h2>
-              <h3>Email</h3>
+              <h2 th:text="${name}"></h2>
+              <h3 th:text="${email}"></h3>
             </div>
           </div>
         </div>
 
-        <div class="col-xl-12">
+        <div class="col-12">
           <div class="card">
             <div class="card-body pt-3">
               <!-- Bordered Tabs -->
@@ -85,12 +87,12 @@
               <div class="tab-content pt-2">
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   <h5 class="card-title">Date of registration</h5>
-                  <p>Date</p>
+                  <p th:text="${creation}"></p>
                 </div>
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
-                  <form class="needs-validation" novalidate>
+                  <form method="POST" action="" class="needs-validation" novalidate>
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Name</label>
                       <div class="col-md-8 col-lg-9">
@@ -107,14 +109,15 @@
                     </div>
 
                     <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="newPassword" required>
-                        <div class="invalid-feedback">Please provide a valid password</div>
-                    </div>
-                    <div class="text-center">
-                      <br>
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input name="password" type="password" class="form-control" id="newPassword" required>
+                          <div class="invalid-feedback">Please provide a valid password</div>
+                      </div>
+                      <div class="text-center">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                      </div>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
@@ -134,7 +137,8 @@
               <h5 class="card-title">Accounts</h5>
 
               <!-- Table with hoverable rows -->
-              <table class="table table-hover">
+              <h3 th:if="${setOfAccounts.isEmpty()}">No accounts found</h3>
+              <table class="table table-hover" th:if="${!setOfAccounts.isEmpty()}">
                 <thead>
                   <tr>
                     <th scope="col">Title</th>
@@ -143,30 +147,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><a href="account.html">Brandon Jacob</a></td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <td><a href="account.html">Bridie Kessler</a></td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                  </tr>
-                  <tr>
-                    <td><a href="account.html">Ashleigh Langosh</a></td>
-                    <td>45</td>
-                    <td>2011-08-12</td>
-                  </tr>
-                  <tr>
-                    <td><a href="account.html">Angus Grady</a></td>
-                    <td>34</td>
-                    <td>2012-06-11</td>
-                  </tr>
-                  <tr>
-                    <td><a href="account.html">Raheem Lehner</a></td>
-                    <td>47</td>
-                    <td>2011-04-19</td>
+                  <tr th:each="account : ${setOfAccounts}">
+                    <td><a th:text="${account.get('title')}" th:href="'/s/account/' + ${account.get('id')}"></a></td>
+                    <td th:text="${account.get('balance')}"></td>
+                    <td th:text="${account.get('creation')}"></td>
                   </tr>
                 </tbody>
               </table>
@@ -180,7 +164,7 @@
             <div class="card-body">
               <h5 class="card-title">New account</h5>
 
-              <form action="/new-account-register" class="needs-validation" method="POST" novalidate>
+              <form action="/s/new_account_register" class="needs-validation" method="POST" novalidate>
                 <label for="inpTitle" class="col-4 col-form-label">Title</label>
                 <div class="col-md-8 col-lg-12">
                   <input name="title" type="text" class="form-control" id="inpTitle" required>
@@ -193,6 +177,7 @@
                 </div>
               </form>
 
+            </div>
           </div>
         </div>
       </div>
@@ -200,35 +185,20 @@
       <!-- OperationTypes -->
       <div class="row">
         
-        <div class="col-lg-6">
+        <div class="col-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Operation Types</h5>
 
-              <!-- Table with hoverable rows -->
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Creation Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Brandon Jacob</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <td>Bridie Kessler</td>
-                    <td>2014-12-05</td>
-                  </tr>
-                  <tr>
-                    <td>Ashleigh Langosh</td>
-                    <td>2011-08-12</td>
-                  </tr>
-                </tbody>
-              </table>
-              <!-- End Table with hoverable rows -->
+              <!-- List of OperationTypes -->
+              <h3 th:if="${setOfOperationTypes.isEmpty()}">No operation types found</h3>
+              <ul  th:if="${!setOfOperationTypes.isEmpty()}">
+                <li th:each="operationType : ${setOfOperationTypes}">
+                  <p th:text="${operationType.get('title')}"></p>
+                </li>
+              </ul>
+              <!-- End List of OperationTypes -->
+
             </div>
           </div>
         </div>
@@ -237,7 +207,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">New operation type</h5>
-              <form action="/new-operationtype-register" class="needs-validation" method="POST" novalidate>
+              <form action="/s/new_operationtype_register" class="needs-validation" method="POST" novalidate>
               <label for="inpOperationTypeTitle" class="col-4 col-form-label">Title</label>
               <div class="col-md-8 col-lg-12">
                 <input name="title" type="text" class="form-control" id="inpOperationTypeTitle" required>
@@ -252,13 +222,13 @@
           </div>
         </div>
         </div>
-      </div>
 
+      </div>
     </section>
   </main><!-- End #main -->
 
   <footer></footer>
 
-  <script src="assets/js/app.js"></script>
+  <script src="/js/app.js"></script>
 </body>
 </html>

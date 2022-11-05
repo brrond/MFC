@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.nix.onishchenko.mfc.api.AccountRequests;
 import ua.nix.onishchenko.mfc.api.OperationTypeRequests;
+import ua.nix.onishchenko.mfc.api.UserRequests;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -38,15 +39,19 @@ public class AccountController {
                     return ldt1.compareTo(ldt2);
                 }).collect(Collectors.toList()));
 
+        Set<Map<String, String>> setOfAccounts = UserRequests.getAllAccounts(token);
+        model.addAttribute("setOfAccounts", (setOfAccounts == null || setOfAccounts.isEmpty()) ? Set.of() : setOfAccounts);
+
+        Set<Map<String, String>> types = UserRequests.getAllOperationTypes(token);
+        if (types == null) types = new HashSet<>();
+        Map<String, String> empty = new HashMap<>(); empty.put("id", "null"); empty.put("title", "default");
+        types.add(empty);
+        model.addAttribute("operationtypes", types);
+
         // TODO: Add 'Delete Operation'
         // TODO: Add filters
 
         return "account";
-    }
-
-    @GetMapping("/new_account")
-    public String newAccount() {
-        return "new_account";
     }
 
     @PostMapping("/new_account_register")
@@ -58,19 +63,14 @@ public class AccountController {
 
         // TODO: Move regex to some Util class
         if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return MessageController.generateMessage(model, "Title doesn't match regex [a-zA-z0-9_. ]+", "/s/new_account");
+            return MessageController.generateMessage(model, "Error", "Title doesn't match regex [a-zA-z0-9_. ]+", "/s/", "To personal page");
         }
 
         String uuid = AccountRequests.create(token, title);
         if (uuid != null) {
-            return MessageController.generateMessage(model, "Account was registered successfully", "/s/");
+            return MessageController.generateMessage(model, "Success", "Account was registered successfully.", "/s/", "To personal page");
         }
-        return MessageController.generateMessage(model, "Something went wrong. Try again", "/s/new_account");
-    }
-
-    @GetMapping("/new_operationtype")
-    public String newOperationType() {
-        return "new_operationtype";
+        return MessageController.generateMessage(model, "Error", "Something went wrong. Try again.", "/s/", "To personal page");
     }
 
     @PostMapping("/new_operationtype_register")
@@ -82,14 +82,14 @@ public class AccountController {
 
         // TODO: Move regex to some Util class
         if (!title.matches("[a-zA-z0-9_. ]+")) {
-            return MessageController.generateMessage(model, "Title doesn't match regex [a-zA-z0-9_. ]+", "/s/new_operationtype");
+            return MessageController.generateMessage(model, "Error", "Title doesn't match regex [a-zA-z0-9_. ]+", "/s/", "To personal page");
         }
 
         String uuid = OperationTypeRequests.create(token, title);
         if (uuid != null) {
-            return MessageController.generateMessage(model, "OperationType was registered successfully", "/s/");
+            return MessageController.generateMessage(model, "Success", "OperationType was registered successfully.", "/s/", "To personal page");
         }
-        return MessageController.generateMessage(model, "Something went wrong. Try again", "/s/new_operationtype");
+        return MessageController.generateMessage(model, "Error", "Something went wrong. Try again", "/s/", "To personal page");
     }
 
 }

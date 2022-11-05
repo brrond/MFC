@@ -1,3 +1,5 @@
+console.log(432);
+
 loadScript("https://cdn.jsdelivr.net/npm/chart.js", () => {
     const graphData = {
         labels: labels,
