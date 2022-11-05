@@ -26,10 +26,21 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=a@a.com
       - PGADMIN_DEFAULT_PASSWORD=pass
+    depends_on:
+      - mfc-db
 
   mfc-rest:
     build: REST/
     container_name: mfc-rest
     ports:
       - 8080:8080
+    depends_on:
+      - mfc-db
 
+  mfc-front:
+    build: frontend/
+    container_name: mfc-front
+    ports:
+      - 8081:8081
+    depends_on:
+      - mfc-rest

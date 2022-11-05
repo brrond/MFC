@@ -16,7 +16,7 @@ public abstract class AbstractAPIRequests {
     private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
     // TODO: Change base url in production
-    private static final String BASE_URL = "http://localhost:8080/api/";
+    private static final String BASE_URL = "http://mfc-rest:8080/api/";
 
     protected static RestTemplate getRestTemplate() {
         return REST_TEMPLATE;
