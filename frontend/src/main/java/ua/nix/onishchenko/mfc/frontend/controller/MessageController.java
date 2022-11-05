@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 
 import static javax.servlet.RequestDispatcher.ERROR_STATUS_CODE;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @CommonsLog
 @Controller

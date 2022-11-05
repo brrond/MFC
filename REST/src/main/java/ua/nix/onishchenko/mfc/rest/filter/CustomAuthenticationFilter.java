@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import ua.nix.onishchenko.mfc.rest.service.UserService;
-import ua.nix.onishchenko.mfc.rest.util.ControllerUtils;
 import ua.nix.onishchenko.mfc.rest.util.SecurityUtils;
 
 import javax.servlet.FilterChain;
@@ -61,7 +60,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         User user = (User) authResult.getPrincipal();
         Algorithm algorithm = SecurityUtils.getAlgorithm();
 

@@ -22,7 +22,6 @@ public final class SecurityUtils {
         return "1fChgDB5WelGYg*iphjsm7U@OMGexW52mOu&DNMw31C3cmSsJM"; // TODO: Secret isn't secure
     }
 
-    // TODO: Maybe manage it like bean?
     public static Algorithm getAlgorithm() {
         return ALGORITHM;
     }

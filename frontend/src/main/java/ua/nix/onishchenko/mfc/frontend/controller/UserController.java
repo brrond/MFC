@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.nix.onishchenko.mfc.api.UserRequests;
+import ua.nix.onishchenko.mfc.frontend.util.Util;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -24,15 +25,19 @@ public class UserController {
         String token = httpSession.getAttribute("access_token").toString();
         Map<String, String> map = UserRequests.getGeneralInfo(token);
         if (map == null || map.isEmpty()) {
-            // TODO: Almost impossible but still implement error case
-            return generateMessage(model, "Error", "You should see it. TODO: Later", "/", "Go to Home");
+            return generateMessage(model, "Error", "Something went wrong", "/", "Go to Home");
         }
 
         model.addAttribute("name", map.get("name"));
         model.addAttribute("email", map.get("email"));
-        model.addAttribute("creation", map.get("creation"));
+        model.addAttribute("creation", Util.convertISOToString(map.get("creation")));
 
         Set<Map<String, String>> setOfAccounts = UserRequests.getAllAccounts(token);
+        if (setOfAccounts != null && !setOfAccounts.isEmpty()) {
+            for (var account : setOfAccounts) {
+                account.put("creation", Util.convertISOToString(account.get("creation")));
+            }
+        }
         model.addAttribute("setOfAccounts", (setOfAccounts == null || setOfAccounts.isEmpty()) ? Set.of() : setOfAccounts);
 
         Set<Map<String, String>> setOfOperationTypes = UserRequests.getAllOperationTypes(token);

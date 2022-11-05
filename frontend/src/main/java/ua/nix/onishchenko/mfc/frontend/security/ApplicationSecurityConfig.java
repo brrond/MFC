@@ -1,5 +1,6 @@
 package ua.nix.onishchenko.mfc.frontend.security;
 
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,16 +14,17 @@ import ua.nix.onishchenko.mfc.frontend.filter.CustomAuthorizationFilter;
 
 import java.util.UUID;
 
+@CommonsLog
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
         customAuthenticationFilter.setFilterProcessesUrl("/authenticate");
         return http
-                .csrf().disable()// TODO: Enable csrf
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/s/**").authenticated()
                 .antMatchers("/**").permitAll()
@@ -51,7 +53,7 @@ public class ApplicationSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager() {
         return authentication -> {
             Object principal = authentication.getPrincipal();
             if (principal != null && principal.toString() != null) {
@@ -59,8 +61,9 @@ public class ApplicationSecurityConfig {
                 try {
                     UUID uuid = UUID.fromString(UUIDStr);
                     authentication.setAuthenticated(true);
-                } catch (Exception ignored) {
-
+                } catch (Exception e) {
+                    log.warn(e.getMessage());
+                    log.debug(e);
                 }
             }
             return authentication;

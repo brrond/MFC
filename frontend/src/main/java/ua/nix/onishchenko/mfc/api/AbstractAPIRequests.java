@@ -5,8 +5,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
@@ -14,7 +12,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public abstract class AbstractAPIRequests {
 
     private static final RestTemplate REST_TEMPLATE = new RestTemplate();
-    
+
     private static final String BASE_URL = "http://mfc-rest:8080/api/";
 
     protected static RestTemplate getRestTemplate() {

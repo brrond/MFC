@@ -34,7 +34,6 @@ public class CheckAccessFilter extends OncePerRequestFilter {
 
     private OperationService operationService = null;
 
-    // TODO: Next three methods can be replaced
     private void checkAccountBelongsToUser(String accountId, UUID userId) {
         if (accountId != null && !accountId.equals("")) {
             Optional<Account> optionalAccount = accountService.findById(UUID.fromString(accountId));
