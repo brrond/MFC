@@ -1,80 +1,332 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Financial Control - Personal page</title>
-    <style>
-        body {
-            overflow: auto;
-        }
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        table {
-            width: 50%;
-            margin: auto;
-        }
-
-        #chartDiv {
-            width: 100%;
-            height: 400px;
-        }
-    </style>
+  <title>MFC - Account Details</title>
 </head>
+
 <body>
-    <div id="header"></div>
-    <div id="content">
-        <h3 th:text="'Account: ' + ${title}"></h3>
-        <h3 th:text="'Balance: ' + ${balance}"></h3>
-        <h3 th:text="'Creation date: ' + ${creation}">Registration date: </h3>
-        <h3><a th:href="'/s/new_operation?accountId=' + ${accountId}">Create new operation</a></h3>
+  <header></header>
 
-        <h3>List of operations on current account: </h3>
-        <h3 th:if="${setOfOperations.isEmpty()}">No operations found</h3>
-        <table border='2' th:if="${!setOfOperations.isEmpty()}">
-            <tr>
-                <td>Sum</td>
-                <td>Type</td>
-                <td>Date</td>
-            </tr>
-            <script th:inline="javascript">
-                /*<![CDATA[*/
-                var creation = /*[[${creation}]]*/'';
-                var data = [0];
-                var labels = [creation];
-                let sum = 0.0;
-                let date = '';
-                /*]]>*/
-            </script>
-            <tr th:each="operation : ${setOfOperations}">
-                <td th:text="${operation.get('sum')}"></td>
-                <td th:text="${operation.get('operationType')}"></td>
-                <td th:text="${operation.get('creation')}"></td>
-                <script th:inline="javascript">
-                    /*<![CDATA[*/
-                    sum = /*[[${operation.get('sum')}]]*/ 0.0;
-                    sum = parseFloat(data[data.length - 1]) + parseFloat(sum);
-                    date = /*[[${operation.get('creation')}]]*/ '';
-                    labels.push(date);
-                    data.push(sum);
-                    /*]]>*/
-                </script>
-            </tr>
-        </table>
-        <hr>
+    <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Home</span>
+        </a>
+      </li>
 
-        <div id="chartDiv">
-            <canvas id="chart"></canvas>
-        </div>
-        <hr>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="personal_page.html">
+          <i class="bi bi-person-fill"></i>
+          <span>Personal Page</span>
+        </a>
+      </li>
 
-        <h3><a href="/s/">Personal page</a></h3>
+      <li class="nav-item">
+        <a class="nav-link " data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="account.html">
+              <i class="bi bi-circle"></i><span>Some account</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Accounts Nav -->
 
-    </div>
-    <div id="footer"></div>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="personal_page.html">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Logout</span>
+        </a>
+      </li>
+  </aside><!-- End Sidebar-->
 
-    <script src="/app.js"></script>
-    <script src="/chart.js"></script>
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Title Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <h5 class="card-title">Title</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-credit-card"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>Title here</h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Title Card -->
+
+            <!-- Balance Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Balance</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>$3,264</h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Balance Card -->
+
+            <!-- Last Operation Card -->
+            <div class="col-xxl-4 col-xl-12">
+              <div class="card info-card customers-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Last operation</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cash"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>20.52</h6>
+                      <span class="small pt-1 fw-bold">Date here</span> <span class="text-muted small pt-2 ps-1"></span>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Last Operation Card -->
+
+            <!-- Statistics -->
+            <div class="col-12">
+              <div class="card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Statistics</h5>
+
+                  <!-- Line Chart -->
+                  <canvas id="lineChart" style="max-height: 400px;"></canvas>
+                  <script>
+                    var loadData = () => {
+                      document.addEventListener("DOMContentLoaded", () => {
+                        new Chart(document.querySelector('#lineChart'), {
+                          type: 'line',
+                          data: {
+                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                            datasets: [{
+                              label: 'Line Chart',
+                              data: [65, 59, 80, 81, 56, 55, 40],
+                              fill: false,
+                              borderColor: 'rgb(75, 192, 192)',
+                              tension: 0.1
+                            }]
+                          },
+                          options: {
+                            scales: {
+                              y: {
+                                beginAtZero: true
+                              }
+                            }
+                          }
+                        });
+                      });
+                    };
+                  </script>
+                  <!-- End Line CHart -->
+                </div>
+
+              </div>
+            </div><!-- End Statistics -->
+
+            <!-- Recent Operations -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                  <h5 class="card-title">Operations</h5>
+
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Sum</th>
+                        <th scope="col">Operation type</th>
+                        <th scope="col">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>$64</td>
+                        <td>Brandon Jacob</td>
+                        <td>At praesentium minu</td>
+                      </tr>
+                      <tr>
+                        <td>$64</td>
+                        <td>Brandon Jacob</td>
+                        <td>At praesentium minu</td>
+                      </tr>
+                      <tr>
+                        <td>$64</td>
+                        <td>Brandon Jacob</td>
+                        <td>At praesentium minu</td>
+                      </tr>
+                      <tr>
+                        <td>$64</td>
+                        <td>Brandon Jacob</td>
+                        <td>At praesentium minu</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Recent Operations -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- New Operation -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">New Operation</h5>
+              <form action="/new-opeartion-register" class="needs-validation" method="POST" novalidate>
+                <label for="inpTitle" class="col-4 col-form-label">Title</label>
+                <div class="col-md-8 col-lg-12">
+                  <input name="title" type="text" class="form-control" id="inpTitle" required>
+                  <div class="invalid-feedback">Please provide a title</div>
+                </div>
+
+                <label for="inpSum" class="col-4 col-form-label">Sum</label>
+                <div class="col-md-8 col-lg-12">
+                  <input name="sum" type="number" class="form-control" id="inpSum" required>
+                  <div class="invalid-feedback">Please provide sum</div>
+                </div>
+
+                <label for="inpSum" class="col-4 col-form-label">Sum</label>
+                <div class="col-md-8 col-lg-12">
+                  <input name="sum" type="datetime-local" class="form-control" id="inpSum" required>
+                  <div class="invalid-feedback">Please provide sum</div>
+                </div>
+
+                <div class="text-center">
+                  <br>
+                  <button type="submit" class="btn btn-success">Create new operation</button>
+                </div>
+              </form>
+            </div>
+          </div><!-- End New Operation -->
+
+          <!-- Budget Report 
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Budget Report <span>| This Month</span></h5>
+
+              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                    legend: {
+                      data: ['Allocated Budget', 'Actual Spending']
+                    },
+                    radar: {
+                      // shape: 'circle',
+                      indicator: [{
+                          name: 'Sales',
+                          max: 6500
+                        },
+                        {
+                          name: 'Administration',
+                          max: 16000
+                        },
+                        {
+                          name: 'Information Technology',
+                          max: 30000
+                        },
+                        {
+                          name: 'Customer Support',
+                          max: 38000
+                        },
+                        {
+                          name: 'Development',
+                          max: 52000
+                        },
+                        {
+                          name: 'Marketing',
+                          max: 25000
+                        }
+                      ]
+                    },
+                    series: [{
+                      name: 'Budget vs spending',
+                      type: 'radar',
+                      data: [{
+                          value: [4200, 3000, 20000, 35000, 50000, 18000],
+                          name: 'Allocated Budget'
+                        },
+                        {
+                          value: [5000, 14000, 28000, 26000, 42000, 21000],
+                          name: 'Actual Spending'
+                        }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div End Budget Report -->
+
+        </div><!-- End Right side columns -->
+
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+  <footer></footer>
+
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
