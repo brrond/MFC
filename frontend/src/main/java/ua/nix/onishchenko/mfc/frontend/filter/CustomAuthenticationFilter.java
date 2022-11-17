@@ -12,9 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ua.nix.onishchenko.mfc.api.AuthorizationRequests;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,10 +42,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             throw new BadCredentialsException("No user found");
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("access_token", map.get("access_token"));
+        Cookie accessTokenCookie = new Cookie("access_token", (String) map.get("access_token"));
+        accessTokenCookie.setMaxAge(Integer.MAX_VALUE);
+        response.addCookie(accessTokenCookie);
         if (Objects.equals(rememberMe, "true")) {
-            session.setAttribute("refresh_token", map.get("refresh_token"));
+            Cookie refreshTokenCookie = new Cookie("refresh_token", (String) map.get("refresh_token"));
+            refreshTokenCookie.setMaxAge(Integer.MAX_VALUE);
+            response.addCookie(refreshTokenCookie);
         }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(map.get("access_token"), null, new ArrayList<>());

@@ -3,12 +3,12 @@ package ua.nix.onishchenko.mfc.frontend.controller;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.nix.onishchenko.mfc.api.UserRequests;
 import ua.nix.onishchenko.mfc.frontend.util.Util;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,9 +20,8 @@ import static ua.nix.onishchenko.mfc.frontend.controller.MessageController.gener
 public class UserController {
 
     @GetMapping("/")
-    public String personalPage(HttpSession httpSession,
+    public String personalPage(@CookieValue("access_token") String token,
                                Model model) {
-        String token = httpSession.getAttribute("access_token").toString();
         Map<String, String> map = UserRequests.getGeneralInfo(token);
         if (map == null || map.isEmpty()) {
             return generateMessage(model, "Error", "Something went wrong", "/", "Go to Home");

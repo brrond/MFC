@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.nix.onishchenko.mfc.api.AuthorizationRequests;
+import ua.nix.onishchenko.mfc.frontend.util.Util;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @CommonsLog
 @Controller
@@ -25,8 +26,8 @@ public class GeneralController {
     @SneakyThrows
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        if (!session.isNew() && session.getAttribute("access_token") != null) {
+        Cookie accessTokenCookie = Util.getAccessTokenCookie(request.getCookies());
+        if (accessTokenCookie != null) {
             response.sendRedirect("/s/");
         }
         return "login";
@@ -35,8 +36,8 @@ public class GeneralController {
     @SneakyThrows
     @GetMapping("/register")
     public String register(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        if (!session.isNew() && session.getAttribute("access_token") != null) {
+        Cookie accessTokenCookie = Util.getAccessTokenCookie(request.getCookies());
+        if (accessTokenCookie != null) {
             response.sendRedirect("/s/");
         }
         return "register";

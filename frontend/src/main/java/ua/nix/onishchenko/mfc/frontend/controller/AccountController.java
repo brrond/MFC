@@ -9,7 +9,6 @@ import ua.nix.onishchenko.mfc.api.OperationTypeRequests;
 import ua.nix.onishchenko.mfc.api.UserRequests;
 import ua.nix.onishchenko.mfc.frontend.util.Util;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -25,9 +24,8 @@ public class AccountController {
 
     @GetMapping("/account/{accountId}")
     public String account(@PathVariable("accountId") String accountId,
-                          HttpSession httpSession,
+                          @CookieValue("access_token") String token,
                           Model model) {
-        String token = httpSession.getAttribute("access_token").toString();
 
         Map<String, String> accountInfo = AccountRequests.getGeneralInfo(token, accountId);
         model.addAttribute("title", accountInfo.get("title"));
@@ -64,10 +62,8 @@ public class AccountController {
 
     @PostMapping("/new_account_register")
     public String newAccountRegistration(Model model,
-                                         HttpSession httpSession,
+                                         @CookieValue("access_token") String token,
                                          @RequestParam("title") String title) {
-
-        String token = httpSession.getAttribute("access_token").toString();
 
         if (!Util.matchRegex(title)) {
             return MessageController.generateMessage(model, "Error", "Title doesn't match format", "/s/", "To personal page");
@@ -82,10 +78,8 @@ public class AccountController {
 
     @PostMapping("/new_operationtype_register")
     public String newOperationTypeRegistration(Model model,
-                                         HttpSession httpSession,
-                                         @RequestParam("title") String title) {
-
-        String token = httpSession.getAttribute("access_token").toString();
+                                               @CookieValue("access_token") String token,
+                                               @RequestParam("title") String title) {
 
         if (!Util.matchRegex(title)) {
             return MessageController.generateMessage(model, "Error", "Title doesn't match format", "/s/", "To personal page");
