@@ -41,10 +41,13 @@ function loadHead() {
     loadLink("https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css", "stylesheet");
     loadLink("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css", "stylesheet");
     loadLink("/css/style.css", "stylesheet");
+    loadLink("/css/notificationManagerStyle.css", "stylesheet");
 }
 
 function loadScriptsOnPage() {
-    loadScripts(["https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js", "https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"], onPageLoad);
+    loadScripts(["https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",
+        "https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js",
+        "https://code.jquery.com/jquery-3.6.1.min.js"], onPageLoad);
 }
 
 function loadHeader() {
@@ -70,6 +73,10 @@ function loadHeader() {
     span.innerText = 'MFC';
     span.classList.add("d-none","d-lg-block");
     a.append(span);
+
+    let menu = document.createElement("i");
+    menu.classList.add("bi", "bi-list", "toggle-sidebar-btn")
+    div.append(menu);
 }
 
 function loadFooter() {
@@ -100,6 +107,8 @@ loadHead();
 
 function onPageLoad() {
     loadScript("/js/main.js");
+    loadScript("/js/notificationManager.js");
+    loadScript("/js/sendRequest.js");
     if (typeof (LOAD_NOTHING) === "undefined") {
         if (typeof (LOAD_NO_HEADER) === "undefined") loadHeader();
         if (typeof (LOAD_NO_FOOTER) === "undefined") loadFooter();
